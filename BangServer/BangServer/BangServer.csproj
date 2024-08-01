@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\OneDrive\바탕 화면\source\소스코드\FreeNet_server_sourcecode\FreeNet\FreeNet.csproj" />
+    <ProjectReference Include="..\..\..\..\Users\handh\OneDrive\바탕 화면\source\소스코드\FreeNet_server_sourcecode\FreeNet\FreeNet.csproj" />
   </ItemGroup>
 
 </Project>

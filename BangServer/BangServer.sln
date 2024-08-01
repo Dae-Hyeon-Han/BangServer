@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.34902.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BangServer", "BangServer\BangServer.csproj", "{0B5C2A04-196B-4547-AA4C-7E048331F87A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BangServer", "BangServer\BangServer.csproj", "{A42B3366-F52D-45D2-B832-5104DC26DAA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeNet", "..\..\..\OneDrive\바탕 화면\source\소스코드\FreeNet_server_sourcecode\FreeNet\FreeNet.csproj", "{90786D2B-F7A9-4A90-A073-838EF232BA6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeNet", "..\..\..\Users\handh\OneDrive\바탕 화면\source\소스코드\FreeNet_server_sourcecode\FreeNet\FreeNet.csproj", "{90786D2B-F7A9-4A90-A073-838EF232BA6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0B5C2A04-196B-4547-AA4C-7E048331F87A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B5C2A04-196B-4547-AA4C-7E048331F87A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B5C2A04-196B-4547-AA4C-7E048331F87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B5C2A04-196B-4547-AA4C-7E048331F87A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A42B3366-F52D-45D2-B832-5104DC26DAA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A42B3366-F52D-45D2-B832-5104DC26DAA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A42B3366-F52D-45D2-B832-5104DC26DAA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A42B3366-F52D-45D2-B832-5104DC26DAA3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90786D2B-F7A9-4A90-A073-838EF232BA6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90786D2B-F7A9-4A90-A073-838EF232BA6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90786D2B-F7A9-4A90-A073-838EF232BA6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -26,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {AEA7D133-06E1-40B7-A1A2-4519E724E948}
+		SolutionGuid = {8F36CF6A-C034-4E2B-A342-1F70E3826830}
 	EndGlobalSection
 EndGlobal
