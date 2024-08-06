@@ -439,7 +439,7 @@ namespace BangServer
 			start_turn();
 		}
 
-
+		// 승패를 가리는 부분
 		void game_over()
 		{
 			// 우승자 가리기.
