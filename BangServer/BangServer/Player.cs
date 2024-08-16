@@ -8,12 +8,12 @@ namespace BangServer
 {
     using FreeNet;
 
-    class Player
+    public class Player
     {
-        CGameUser owner;
+        GameUser owner;
         public byte player_index { get; private set; }
 
-        public Player(CGameUser user, byte player_index)
+        public Player(GameUser user, byte player_index)
         {
             this.owner = user;
             this.player_index = player_index;
@@ -23,6 +23,11 @@ namespace BangServer
         {
             this.owner.send(msg);
             CPacket.destroy(msg);
+        }
+
+        public void send_for_broadcast(CPacket msg)
+        {
+            this.owner.send(msg);
         }
     }
 }

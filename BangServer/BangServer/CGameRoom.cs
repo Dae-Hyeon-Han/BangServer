@@ -472,7 +472,7 @@ namespace BangServer
 			broadcast(msg);
 
 			//방 제거.
-			Program.game_main.room_manager.remove_room(this);
+			//Program.game_main.room_manager.remove_room(this);
 		}
 
 

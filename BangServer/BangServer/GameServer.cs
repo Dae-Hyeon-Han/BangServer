@@ -9,6 +9,7 @@ namespace BangServer
     using FreeNet;
     using System.Threading;
 
+	// 실제 게임 중 처리되는 루틴에 대한 코드
     class GameServer
     {
 		object operation_lock;
@@ -22,10 +23,10 @@ namespace BangServer
 		// 게임 로직 처리 관련 변수들.
 		//----------------------------------------------------------------
 		// 게임방을 관리하는 매니저.
-		public CGameRoomManager room_manager { get; private set; }
+		public GameRoomManager room_manager { get; private set; }
 
 		// 매칭 대기 리스트.
-		List<CGameUser> matching_waiting_users;
+		List<GameUser> matching_waiting_users;
 		//----------------------------------------------------------------
 
 		public GameServer()
@@ -35,8 +36,8 @@ namespace BangServer
 			this.user_operations = new Queue<CPacket>();
 
 			// 게임 로직 관련.
-			this.room_manager = new CGameRoomManager();
-			this.matching_waiting_users = new List<CGameUser>();
+			this.room_manager = new GameRoomManager();
+			this.matching_waiting_users = new List<GameUser>();
 
 			this.logic_thread = new Thread(gameloop);
 			this.logic_thread.Start();
@@ -73,7 +74,7 @@ namespace BangServer
 			}
 		}
 
-		public void enqueue_packet(CPacket packet, CGameUser user)
+		public void enqueue_packet(CPacket packet, GameUser user)
 		{
 			lock (this.operation_lock)
 			{
@@ -95,7 +96,7 @@ namespace BangServer
 		/// 유저로부터 매칭 요청이 왔을 때 호출됨.
 		/// </summary>
 		/// <param name="user">매칭을 신청한 유저 객체</param>
-		public void matching_req(CGameUser user)
+		public void matching_req(GameUser user)
 		{
 			// 대기 리스트에 중복 추가 되지 않도록 체크.
 			if (this.matching_waiting_users.Contains(user))
@@ -110,7 +111,7 @@ namespace BangServer
 			if (this.matching_waiting_users.Count == 2)
 			{
 				// 게임 방 생성.
-				this.room_manager.create_room(this.matching_waiting_users[0], this.matching_waiting_users[1]);
+				this.room_manager.CreateRoom(this.matching_waiting_users[0], this.matching_waiting_users[1]);
 
 				// 매칭 대기 리스트 삭제.
 				this.matching_waiting_users.Clear();
@@ -118,7 +119,7 @@ namespace BangServer
 		}
 
 
-		public void user_disconnected(CGameUser user)
+		public void user_disconnected(GameUser user)
 		{
 			if (this.matching_waiting_users.Contains(user))
 			{
