@@ -120,6 +120,94 @@ namespace BangServer
             user2.EnterRoom(player2, this);
         }
 
+        public void LoadingComplete(Player player)
+        {
+            // 해당 플레이어를 로딩 완료 상태로 변경
+            ChangePlayerState(player, PLAYER_STATE.LOADING_COMPLETE);
+
+            // 모든 유저가 준비 상태인지 체크
+            if (!AllPlayersReady(PLAYER_STATE.LOADING_COMPLETE))
+                return;
+
+            // 모두 준비 되었다면 게임 시작
+            BattleStart();
+        }
+
+        /// <summary>
+        /// 게임을 시작한다.
+        /// </summary>
+        void BattleStart()
+        {
+            // 게임을 새로 시작할 때마다 초기화 해줘야 할 것들.
+            ResetGameData();
+
+            // 게임 시작 메시지 전송
+            CPacket msg = CPacket.create((short)BangProtocol.GAME_START);
+
+            // 플레이어에게 두장의 캐릭터 중 하나 택할 것을 요구
+
+            // 첫턴을 진행할 플레이어 인덱스
+            msg.push(this.currentTurnPlayer);
+            BroadCast(msg);
+        }
+
+        /// <summary>
+        /// 턴을 시작하라고 클라이언트들에게 알려준다.
+        /// </summary>
+        void StartTurn()
+        {
+            this.players.ForEach(player => ChangePlayerState(player, PLAYER_STATE.READY_TO_TURN));
+            CPacket msg = CPacket.create((short)BangProtocol.START_PLAYER_TURN);
+            msg.push(this.currentTurnPlayer);
+            BroadCast(msg);
+        }
+
+        /// <summary>
+        /// 게임 데이터 초기화
+        /// </summary>
+        void ResetGameData()
+        {
+
+        }
+
+        /// <summary>
+        /// 플레이어 인덱스에 해당하는 플레이어를 구한다.
+        /// </summary>
+        /// <param name="playerIndex"></param>
+        /// <returns></returns>
+        Player GetPlayer(byte playerIndex)
+        {
+            return this.players.Find(obj => obj.player_index == playerIndex);
+        }
+
+        /// <summary>
+        /// 현재 턴인 플레이어의 상대 플레이어를 구한다?
+        /// </summary>
+        /// <returns></returns>
+        Player GetOpponentPlayer()
+        {
+            return this.players.Find(player => player.player_index != this.currentTurnPlayer);
+        }
+
+        /// <summary>
+		/// 현재 턴을 진행중인 플레이어를 구한다.
+		/// </summary>
+		/// <returns></returns>
+		Player GetCurrentPlayer()
+        {
+            return this.players.Find(player => player.player_index == this.currentTurnPlayer);
+        }
+
+        /// <summary>
+        /// 클라이언트의 bang 공격 요청
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="TargetPlayer"></param>
+        public void ShotPlayer(Player sender, short TargetPlayer)
+        {
+
+        }
+
 
 
 
