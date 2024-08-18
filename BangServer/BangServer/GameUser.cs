@@ -67,6 +67,9 @@ namespace BangServer
 
                 // 플레이어의 메인 턴 이전의 행위 요청
                 case BangProtocol.PLAYER_FIRST_ACT:
+                    {
+                        this.battleRoom.
+                    }
                     break;
 
                 // 플레이어의 메인 턴 행위 요청

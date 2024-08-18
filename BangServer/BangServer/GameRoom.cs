@@ -203,9 +203,21 @@ namespace BangServer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="TargetPlayer"></param>
-        public void ShotPlayer(Player sender, short TargetPlayer)
+        public void ShotPlayer(Player Attacker, Player Target, short AttackRange)
         {
 
+        }
+
+        /// <summary>
+        /// 공격자의 사정거리 안에 타깃이 존재하는지 체크
+        /// </summary>
+        /// <param name="Attacker">공격자</param>
+        /// <param name="Target">피격자</param>
+        /// <param name="AttackRange">공격자의 공격 범위</param>
+        /// <returns></returns>
+        bool IsAttack(Player Attacker, Player Target, short AttackRange)
+        {
+            return true;
         }
 
 
