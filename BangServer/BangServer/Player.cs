@@ -12,6 +12,7 @@ namespace BangServer
     {
         GameUser owner;
         public byte player_index { get; private set; }
+        public int playerFlag;      // 플레이어 지정 번호
 
         public Player(GameUser user, byte player_index)
         {

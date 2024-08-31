@@ -100,6 +100,8 @@ namespace BangServer
             // 플레이어들을 생성하고 각각 0번, 1번 인덱스를 부여해준다.
             Player player1 = new Player(user1, 0);
             Player player2 = new Player(user2, 1);
+            
+            // 이 리스트를 기반으로 유저간 거리 측정할 때 쓸 것.
             this.players.Clear();
             this.players.Add(player1);
             this.players.Add(player2);
@@ -108,6 +110,9 @@ namespace BangServer
             this.playerState.Clear();
             ChangePlayerState(player1, PLAYER_STATE.ENTERED_ROOM);
             ChangePlayerState(player2, PLAYER_STATE.ENTERED_ROOM);
+
+            //player1.playerFlag = 0;
+            //player2.playerFlag = 1;
 
             // 로딩 시작 메시지 전송
             this.players.ForEach(player =>
