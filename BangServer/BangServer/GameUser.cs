@@ -82,6 +82,10 @@ namespace BangServer
 
                 // 플레이어가 메시지를 보냄
                 case BangProtocol.PLAYER_CHAT_SEND:
+                    {
+                        string text = msg.pop_string();
+                        this.battleRoom.BroadCast(msg);
+                    }
                     break;
 
                 // 플레이어가 메시지를 받음

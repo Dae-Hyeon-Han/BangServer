@@ -54,7 +54,7 @@ namespace BangServer
         /// 채팅 내역, 개별 플레이어의 정보(라이프, 잔여 카드 수, (시작 시) 선택한 캐릭터 등)
         /// </summary>
         /// <param name="msg"></param>
-        void BroadCast(CPacket msg)
+        public void BroadCast(CPacket msg)
         {
             this.players.ForEach(player => player.send_for_broadcast(msg));
             CPacket.destroy(msg);
