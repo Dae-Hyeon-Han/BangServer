@@ -79,6 +79,14 @@ namespace BangServer
                 // 플레이어 턴 완료
                 case BangProtocol.TURN_FINISHED_REQ:
                     break;
+
+                // 플레이어가 메시지를 보냄
+                case BangProtocol.PLAYER_CHAT_SEND:
+                    break;
+
+                // 플레이어가 메시지를 받음
+                case BangProtocol.PLAYER_CHAT_RECV:
+                    break;
             }
         }
 
