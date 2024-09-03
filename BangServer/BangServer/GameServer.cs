@@ -52,6 +52,7 @@ namespace BangServer
 			while (true)
 			{
 				CPacket packet = null;
+
 				lock (this.operation_lock)
 				{
 					if (this.user_operations.Count > 0)
@@ -59,6 +60,8 @@ namespace BangServer
 						packet = this.user_operations.Dequeue();
 					}
 				}
+
+				//Console.WriteLine(packet + "패킷");
 
 				if (packet != null)
 				{

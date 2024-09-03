@@ -57,7 +57,6 @@ namespace BangServer
                 // 입장 요청
                 case BangProtocol.ENTER_GAME_ROOM_REQ:
                     Program.game_main.matching_req(this);
-                    Console.WriteLine("ddd");
                     break;
 
                 // 로딩(매칭) 완료
@@ -83,8 +82,10 @@ namespace BangServer
                 // 플레이어가 메시지를 보냄
                 case BangProtocol.PLAYER_CHAT_SEND:
                     {
+                        Console.WriteLine("채팅 침");
                         string text = msg.pop_string();
-                        this.battleRoom.BroadCast(msg);
+                        Console.WriteLine(text);
+                        battleRoom.BroadCast(msg);
                     }
                     break;
 

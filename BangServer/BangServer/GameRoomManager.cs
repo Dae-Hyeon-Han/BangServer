@@ -27,6 +27,8 @@ namespace BangServer
             GameRoom battleRoom = new GameRoom();
             battleRoom.EnterGameRoom(user1, user2);
 
+            Console.WriteLine("방 생성!");
+
             // 방 리스트에 추가하여 관리
             this.rooms.Add(battleRoom);
         }
