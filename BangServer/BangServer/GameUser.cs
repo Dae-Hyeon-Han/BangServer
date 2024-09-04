@@ -82,10 +82,13 @@ namespace BangServer
                 // 플레이어가 메시지를 보냄
                 case BangProtocol.PLAYER_CHAT_SEND:
                     {
-                        Console.WriteLine("채팅 침");
+                        //Console.WriteLine("채팅 침");
                         string text = msg.pop_string();
                         Console.WriteLine(text);
-                        battleRoom.BroadCast(msg);
+                        CPacket message = CPacket.create((short)BangProtocol.PLAYER_CHAT_RECV);
+                        message.push(text);
+                        //battleRoom.BroadCast(msg);
+                        battleRoom.BroadCast(message);
                     }
                     break;
 
