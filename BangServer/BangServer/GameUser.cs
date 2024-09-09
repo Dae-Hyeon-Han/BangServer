@@ -56,12 +56,18 @@ namespace BangServer
             {
                 // 입장 요청
                 case BangProtocol.ENTER_GAME_ROOM_REQ:
-                    Program.game_main.matching_req(this);
+                    {
+                        Program.game_main.matching_req(this);
+                        Console.WriteLine("입장 요청!");
+                    }
                     break;
 
                 // 로딩(매칭) 완료
                 case BangProtocol.LOADING_COMPLETED:
-                    
+                    {
+                        battleRoom.LoadingComplete(player);
+                        Console.WriteLine("로딩 완료!");
+                    }
                     break;
 
                 // 플레이어의 메인 턴 이전의 행위(감옥, 다이너마이트 등) 요청
@@ -80,20 +86,16 @@ namespace BangServer
                     break;
 
                 // 플레이어가 메시지를 보냄
-                case BangProtocol.PLAYER_CHAT_SEND:
+                case BangProtocol.PLAYER_CHAT:
                     {
                         //Console.WriteLine("채팅 침");
                         string text = msg.pop_string();
                         Console.WriteLine(text);
-                        CPacket message = CPacket.create((short)BangProtocol.PLAYER_CHAT_RECV);
+                        CPacket message = CPacket.create((short)BangProtocol.PLAYER_CHAT);
                         message.push(text);
                         //battleRoom.BroadCast(msg);
                         battleRoom.BroadCast(message);
                     }
-                    break;
-
-                // 플레이어가 메시지를 받음
-                case BangProtocol.PLAYER_CHAT_RECV:
                     break;
             }
         }

@@ -119,6 +119,7 @@ namespace BangServer
             {
                 CPacket msg = CPacket.create((Int16)BangProtocol.START_LOADING);
                 msg.push(player.player_index);      // 본인의 플레이어 인덱스를 알려줌
+                Console.WriteLine("엔터 게임 룸:" + msg.protocol_id);
             });
 
             user1.EnterRoom(player1, this);
@@ -150,6 +151,7 @@ namespace BangServer
             CPacket msg = CPacket.create((short)BangProtocol.GAME_START);
 
             // 플레이어에게 두장의 캐릭터 중 하나 택할 것을 요구
+            Console.WriteLine("게임 시작");
 
             // 첫턴을 진행할 플레이어 인덱스
             msg.push(this.currentTurnPlayer);

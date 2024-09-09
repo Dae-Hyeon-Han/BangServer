@@ -8,6 +8,7 @@ namespace BangServer
 {
     using FreeNet;
 
+    // 객체로서의 플레이어가 아니라, 접속한 개개인을 가리키는 것으로 추정
     public class Player
     {
         GameUser owner;

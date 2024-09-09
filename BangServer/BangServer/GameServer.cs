@@ -96,7 +96,7 @@ namespace BangServer
 
 
 		/// <summary>
-		/// 유저로부터 매칭 요청이 왔을 때 호출됨.
+		/// 유저로부터 매칭 요청이 왔을 때 호출됨. 두번째 조건문 7명으로 수정 필요
 		/// </summary>
 		/// <param name="user">매칭을 신청한 유저 객체</param>
 		public void matching_req(GameUser user)
@@ -113,6 +113,8 @@ namespace BangServer
 			// 2명이 모이면 매칭 성공.
 			if (this.matching_waiting_users.Count == 2)
 			{
+				Console.WriteLine("매칭 성공");
+
 				// 게임 방 생성.
 				this.room_manager.CreateRoom(this.matching_waiting_users[0], this.matching_waiting_users[1]);
 
