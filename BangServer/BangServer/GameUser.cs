@@ -27,13 +27,13 @@ namespace BangServer
             byte[] clone = new byte[1024];
             Array.Copy(buffer.Value, clone, buffer.Value.Length);
             CPacket msg = new CPacket(clone, this);
-            Program.game_main.enqueue_packet(msg, this);
+            //Program.game_main.enqueue_packet(msg, this);
         }
 
         void IPeer.on_removed()
         {
             Console.WriteLine("클라이언트 연결 종료");
-            Program.remove_user(this);
+            //Program.remove_user(this);
         }
 
         public void send(CPacket msg)
@@ -57,7 +57,7 @@ namespace BangServer
                 // 입장 요청
                 case BangProtocol.ENTER_GAME_ROOM_REQ:
                     {
-                        Program.game_main.matching_req(this);
+                        //Program.game_main.matching_req(this);
                         Console.WriteLine("입장 요청!");
                     }
                     break;

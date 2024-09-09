@@ -9,14 +9,13 @@ namespace BangServer
 {
 	class Program
 	{
-		static List<GameUser> userlist;
-		//public static CGameServer game_main = new CGameServer();
-		public static GameServer game_main = new GameServer();
+		static List<CGameUser> userlist;
+		public static CGameServer game_main = new CGameServer();
 
 		static void Main(string[] args)
 		{
 			CPacketBufferManager.initialize(2000);
-			userlist = new List<GameUser>();
+			userlist = new List<CGameUser>();
 
 			CNetworkService service = new CNetworkService();
 			// 콜백 매소드 설정.
@@ -44,24 +43,24 @@ namespace BangServer
 		/// <returns></returns>
 		static void on_session_created(CUserToken token)
 		{
-			GameUser user = new GameUser(token);
+			CGameUser user = new CGameUser(token);
 			lock (userlist)
 			{
 				userlist.Add(user);
 			}
 		}
 
-		public static void remove_user(GameUser user)
+		public static void remove_user(CGameUser user)
 		{
 			lock (userlist)
 			{
 				userlist.Remove(user);
 				game_main.user_disconnected(user);
 
-				GameRoom room = user.battleRoom;
+				CGameRoom room = user.battle_room;
 				if (room != null)
 				{
-					game_main.room_manager.RemoveRoom(user.battleRoom);
+					game_main.room_manager.remove_room(user.battle_room);
 				}
 			}
 		}

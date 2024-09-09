@@ -30,14 +30,14 @@ namespace BangServer
 			byte[] clone = new byte[1024];
 			Array.Copy(buffer.Value, clone, buffer.Value.Length);
 			CPacket msg = new CPacket(clone, this);
-			//Program.game_main.enqueue_packet(msg, this);		// 롤백 시 주석 해제
+			Program.game_main.enqueue_packet(msg, this);		// 롤백 시 주석 해제
 		}
 
 		void IPeer.on_removed()
 		{
 			Console.WriteLine("The client disconnected.");
 
-			//Program.remove_user(this);						// 롤백 시 주석 해제
+			Program.remove_user(this);						// 롤백 시 주석 해제
 		}
 
 		public void send(CPacket msg)
@@ -58,7 +58,7 @@ namespace BangServer
 			switch (protocol)
 			{
 				case PROTOCOL.ENTER_GAME_ROOM_REQ:
-					//Program.game_main.matching_req(this);
+					Program.game_main.matching_req(this);
 					break;
 
 				case PROTOCOL.LOADING_COMPLETED:
