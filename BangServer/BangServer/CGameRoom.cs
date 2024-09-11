@@ -173,6 +173,8 @@ namespace BangServer
 		/// </summary>
 		void battle_start()
 		{
+			Console.WriteLine("게임 시작!");
+
 			// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
 			reset_gamedata();
 
@@ -483,5 +485,20 @@ namespace BangServer
 
 			this.players.Clear();
 		}
-	}
+
+        #region 뱅 용 메서드
+		// 유저 목록 및 배치 초기화
+		public void UserReset()
+        {
+
+        }
+
+		public void Shot(CPlayer sender, byte target_index)
+        {
+			// 플레이어 구분 어케함?
+
+			// 
+        }
+        #endregion
+    }
 }

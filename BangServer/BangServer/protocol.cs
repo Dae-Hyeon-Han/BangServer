@@ -40,5 +40,20 @@ namespace BangServer
         // 게임 종료.
         GAME_OVER = 10,
         #endregion
+
+        #region 여기서부터 뱅 전용 프로토콜
+        // 누군가를 사격할 경우
+        SHOT_REQ = 11,
+
+        // 인디언 사용
+        INDIANS_REQ = 13,
+
+        // 기관총 사용
+        MACHINE_GUN_REQ = 15,
+
+        // 결투 사용
+        DUEL_REQ = 17,
+
+        #endregion
     }
 }
