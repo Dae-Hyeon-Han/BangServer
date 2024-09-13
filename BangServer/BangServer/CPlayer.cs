@@ -11,7 +11,8 @@ namespace BangServer
 	public class CPlayer
 	{
 		CGameUser owner;
-		public byte player_index { get; private set; }
+		public byte player_index { get; private set; }		// 플레이어를 분간하는 변수.
+		public string playerId { get; set; }					// 플레이어 아이디를 저장하는 변수
 		public List<short> viruses { get; private set; }
 
 		public CPlayer(CGameUser user, byte player_index)

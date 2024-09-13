@@ -92,7 +92,7 @@ namespace BangServer
 
 
 		/// <summary>
-		/// 유저로부터 매칭 요청이 왔을 때 호출됨.
+		/// 유저로부터 매칭 요청이 왔을 때 호출됨. 7명으로 변경시 수정 필요
 		/// </summary>
 		/// <param name="user">매칭을 신청한 유저 객체</param>
 		public void matching_req(CGameUser user)
