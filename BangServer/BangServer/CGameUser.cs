@@ -58,9 +58,9 @@ namespace BangServer
 			switch (protocol)
 			{
 				case PROTOCOL.ENTER_GAME_ROOM_REQ:
-					//player.playerId = msg.pop_string();				// 플레이어가 왜 null이지?
-					//Console.WriteLine("플레이어 아이디: " + player.playerId);
-					Program.game_main.matching_req(this);
+                    //player.playerId = msg.pop_string();             // 플레이어가 왜 null이지?
+                    //Console.WriteLine("플레이어 아이디: " + player.playerId);
+                    Program.game_main.matching_req(this);
 					break;
 
 				case PROTOCOL.LOADING_COMPLETED:
