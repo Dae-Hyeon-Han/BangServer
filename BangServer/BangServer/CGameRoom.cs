@@ -31,6 +31,8 @@ namespace BangServer
 		// 게임을 진행하는 플레이어. 1P, 2P가 존재한다.
 		List<CPlayer> players;
 
+		List<CCard> deck;
+
 		// 플레이어들의 상태를 관리하는 변수.
 		Dictionary<byte, PLAYER_STATE> player_state;
 
@@ -487,8 +489,110 @@ namespace BangServer
 		}
 
         #region 뱅 용 메서드
-		// 유저 목록 및 배치 초기화
-		public void UserReset()
+		// 게임 시작시 덱 초기화
+        public List<CCard> DeckSet()
+        {
+			// 카드 생성. 숫자와 무늬는 랜덤 생성
+			for(int i=0; i<80; i++)
+            {
+				CCard card = new CCard();
+
+				if(i<25)
+                {
+					card.name = "Bang!";		// 뱅 * 25
+					
+                }
+				else if(i<37)
+                {
+					card.name = "Missed!";		// 빗나감 * 12
+                }
+				else if(i<43)
+                {
+					card.name = "Beer!";		// 맥주 * 6
+                }
+				else if(i<44)
+                {
+					card.name = "Gatling!";		// 기관총 * 1
+                }
+				else if(i<47)
+                {
+					card.name = "Duel!";		// 결투 * 3
+                }
+				else if(i<49)
+                {
+					card.name = "Indian!";		// 인디언 * 2
+                }
+				else if(i<50)
+                {
+					card.name = "Saloon!";		// 주점 * 1
+                }
+				else if (i < 54)
+				{
+					card.name = "Panic!";		// 강탈 * 4
+				}
+				else if (i < 58)
+				{
+					card.name = "Cat Balou!";	// 캣벌로우 * 4
+				}
+				else if (i < 60)
+				{
+					card.name = "General Store";	// 잡화점 * 2
+				}
+				else if (i < 62)
+				{
+					card.name = "Stagecoach";		// 역마차 * 2
+				}
+				else if (i < 63)
+				{
+					card.name = "Wells Fargo";       // 웰스파고 은행 * 1
+				}
+				else if (i < 66)
+				{
+					card.name = "Schofield";       // 스코필드(총) * 3
+				}
+				else if (i < 67)
+				{
+					card.name = "Remington";       // 레밍턴(총) * 1
+				}
+				else if (i < 68)
+				{
+					card.name = "Carabine";			// 카빈(총) * 1
+				}
+				else if (i < 69)
+				{
+					card.name = "Winchester";       // 윈체스터(총) * 1
+				}
+				else if (i < 71)
+				{
+					card.name = "Volcanic";			// 볼캐닉(총) * 2
+				}
+				else if (i < 72)
+				{
+					card.name = "Scope";			 // 조준경 * 1
+				}
+				else if (i < 74)
+				{
+					card.name = "Mustang";			// 야생마 * 2
+				}
+				else if (i < 76)
+				{
+					card.name = "Barrel";			 // 술통 * 2
+				}
+				else if (i < 79)
+				{
+					card.name = "Jail";				// 감옥 * 3
+				}
+				else if (i < 80)
+				{
+					card.name = "Dynamite";       // 다이너마이트 * 1
+				}
+
+			}
+            return null;
+        }
+
+        // 유저 목록 및 배치 초기화
+        public void UserReset()
         {
 
         }
