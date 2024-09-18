@@ -177,26 +177,39 @@ namespace BangServer
 		{
 			Console.WriteLine("게임 시작!");
 
+			//// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
+			//reset_gamedata();
+
+			//// 게임 시작 메시지 전송.
+			//CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
+			//// 플레이어들의 세균 위치 전송.
+			//msg.push((byte)this.players.Count);
+			//this.players.ForEach(player =>
+			//{
+			//	msg.push(player.player_index);      // 누구인지 구분하기 위한 플레이어 인덱스.
+
+			//	// 플레이어가 소지한 세균들의 전체 개수.
+			//	byte cell_count = (byte)player.viruses.Count;
+			//	msg.push(cell_count);
+			//	// 플레이어의 세균들의 위치정보.
+			//	player.viruses.ForEach(position => msg.push_int16(position));
+			//});
+			//// 첫 턴을 진행할 플레이어 인덱스.
+			//msg.push(this.current_turn_player);
+			//broadcast(msg);
+
 			// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
-			reset_gamedata();
 
 			// 게임 시작 메시지 전송.
 			CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
-			// 플레이어들의 세균 위치 전송.
-			msg.push((byte)this.players.Count);
-			this.players.ForEach(player =>
-			{
-				msg.push(player.player_index);      // 누구인지 구분하기 위한 플레이어 인덱스.
 
-				// 플레이어가 소지한 세균들의 전체 개수.
-				byte cell_count = (byte)player.viruses.Count;
-				msg.push(cell_count);
-				// 플레이어의 세균들의 위치정보.
-				player.viruses.ForEach(position => msg.push_int16(position));
-			});
-			// 첫 턴을 진행할 플레이어 인덱스.
-			msg.push(this.current_turn_player);
-			broadcast(msg);
+			// 덱 셋팅 DeckSet
+			List<CCard> deck = new List<CCard>();
+			deck = DeckSet();
+
+			// 플레이어들에게 선택창(캐릭터 픽) 전송
+
+			// 동기화는...?
 		}
 
 
@@ -220,20 +233,20 @@ namespace BangServer
 		/// </summary>
 		void reset_gamedata()
 		{
-			// 보드판 데이터 초기화.
-			for (int i = 0; i < this.gameboard.Count; ++i)
-			{
-				this.gameboard[i] = EMPTY_SLOT;
-			}
-			// 1번 플레이어의 세균은 왼쪽위(0,0), 오른쪽위(0,6) 두군데에 배치한다.
-			put_virus(0, 0, 0);
-			put_virus(0, 0, 6);
-			// 2번 플레이어는 세균은 왼쪽아래(6,0), 오른쪽아래(6,6) 두군데에 배치한다.
-			put_virus(1, 6, 0);
-			put_virus(1, 6, 6);
+			//// 보드판 데이터 초기화.
+			//for (int i = 0; i < this.gameboard.Count; ++i)
+			//{
+			//	this.gameboard[i] = EMPTY_SLOT;
+			//}
+			//// 1번 플레이어의 세균은 왼쪽위(0,0), 오른쪽위(0,6) 두군데에 배치한다.
+			//put_virus(0, 0, 0);
+			//put_virus(0, 0, 6);
+			//// 2번 플레이어는 세균은 왼쪽아래(6,0), 오른쪽아래(6,6) 두군데에 배치한다.
+			//put_virus(1, 6, 0);
+			//put_virus(1, 6, 6);
 
-			// 턴 초기화.
-			this.current_turn_player = 0;   // 1P부터 시작.
+			//// 턴 초기화.
+			//this.current_turn_player = 0;   // 1P부터 시작.
 		}
 
 
