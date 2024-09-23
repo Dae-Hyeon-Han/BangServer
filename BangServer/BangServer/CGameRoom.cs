@@ -205,18 +205,28 @@ namespace BangServer
 
             // 게임 시작 메시지 전송.
             CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
+
+			// 플레이어들에게 선택창(캐릭터 픽) 전송
 			this.players.ForEach(player =>
 			{
-				msg.push(player.player_index);      // 플레이어 구분을 위한 플레이어 인덱스
+				
 			});
 
             // 덱 셋팅 DeckSet
             List<CCard> deck = new List<CCard>();
             deck = DeckSet();
 
-            // 플레이어들에게 선택창(캐릭터 픽) 전송
 
-            // 동기화는...?
+			// 플레이어들이 선택한 캐릭터 전송
+			this.players.ForEach(player =>
+			{
+				msg.push(player.player_index);      // 플레이어 구분을 위한 플레이어 인덱스
+			});
+			// 동기화는...?
+
+			// 첫턴을 시작할 플레이어 인덱스
+			msg.push(this.current_turn_player);
+			broadcast(msg);
         }
 
 
@@ -606,9 +616,13 @@ namespace BangServer
 				{
 					card.name = "Dynamite";       // 다이너마이트 * 1
 				}
-
 			}
             return null;
+        }
+
+		public void CharacterChoice()
+        {
+
         }
 
         // 유저 목록 및 배치 초기화
