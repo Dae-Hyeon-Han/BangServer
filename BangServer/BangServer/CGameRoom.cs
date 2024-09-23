@@ -177,40 +177,47 @@ namespace BangServer
 		{
 			Console.WriteLine("게임 시작!");
 
-			//// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
-			//reset_gamedata();
+            #region 구버전
+            //// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
+            //reset_gamedata();
 
-			//// 게임 시작 메시지 전송.
-			//CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
-			//// 플레이어들의 세균 위치 전송.
-			//msg.push((byte)this.players.Count);
-			//this.players.ForEach(player =>
-			//{
-			//	msg.push(player.player_index);      // 누구인지 구분하기 위한 플레이어 인덱스.
+            //// 게임 시작 메시지 전송.
+            //CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
+            //// 플레이어들의 세균 위치 전송.
+            //msg.push((byte)this.players.Count);
+            //this.players.ForEach(player =>
+            //{
+            //    msg.push(player.player_index);      // 누구인지 구분하기 위한 플레이어 인덱스.
 
-			//	// 플레이어가 소지한 세균들의 전체 개수.
-			//	byte cell_count = (byte)player.viruses.Count;
-			//	msg.push(cell_count);
-			//	// 플레이어의 세균들의 위치정보.
-			//	player.viruses.ForEach(position => msg.push_int16(position));
-			//});
-			//// 첫 턴을 진행할 플레이어 인덱스.
-			//msg.push(this.current_turn_player);
-			//broadcast(msg);
+            //    // 플레이어가 소지한 세균들의 전체 개수.
+            //    byte cell_count = (byte)player.viruses.Count;
+            //    msg.push(cell_count);
+            //    // 플레이어의 세균들의 위치정보.
+            //    player.viruses.ForEach(position => msg.push_int16(position));
+            //});
+            //// 첫 턴을 진행할 플레이어 인덱스.
+            //msg.push(this.current_turn_player);
+            //broadcast(msg);
+            #endregion
 
-			// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
 
-			// 게임 시작 메시지 전송.
-			CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
+            // 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
 
-			// 덱 셋팅 DeckSet
-			List<CCard> deck = new List<CCard>();
-			deck = DeckSet();
+            // 게임 시작 메시지 전송.
+            CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
+			this.players.ForEach(player =>
+			{
+				msg.push(player.player_index);      // 플레이어 구분을 위한 플레이어 인덱스
+			});
 
-			// 플레이어들에게 선택창(캐릭터 픽) 전송
+            // 덱 셋팅 DeckSet
+            List<CCard> deck = new List<CCard>();
+            deck = DeckSet();
 
-			// 동기화는...?
-		}
+            // 플레이어들에게 선택창(캐릭터 픽) 전송
+
+            // 동기화는...?
+        }
 
 
 		/// <summary>
