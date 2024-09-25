@@ -43,7 +43,9 @@ namespace BangServer
 
         #region 여기서부터 뱅 전용 프로토콜
         // 누군가를 사격할 경우
-        SHOT_REQ = 11,
+        CharacterChoice = 11,
+
+        SHOT_REQ = 12,
 
         // 인디언 사용
         INDIANS_REQ = 13,

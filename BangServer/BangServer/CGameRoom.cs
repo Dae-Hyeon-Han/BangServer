@@ -31,7 +31,11 @@ namespace BangServer
 		// 게임을 진행하는 플레이어. 1P, 2P가 존재한다.
 		List<CPlayer> players;
 
+		// 플레잉 카드
 		List<CCard> deck;
+
+		// 캐릭터 카드
+		List<string> Characters;
 
 		// 플레이어들의 상태를 관리하는 변수.
 		Dictionary<byte, PLAYER_STATE> player_state;
@@ -177,39 +181,42 @@ namespace BangServer
 		{
 			Console.WriteLine("게임 시작!");
 
-            #region 구버전
-            //// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
-            //reset_gamedata();
+			#region 구버전
+			//// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
+			//reset_gamedata();
 
-            //// 게임 시작 메시지 전송.
-            //CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
-            //// 플레이어들의 세균 위치 전송.
-            //msg.push((byte)this.players.Count);
-            //this.players.ForEach(player =>
-            //{
-            //    msg.push(player.player_index);      // 누구인지 구분하기 위한 플레이어 인덱스.
+			//// 게임 시작 메시지 전송.
+			//CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
+			//// 플레이어들의 세균 위치 전송.
+			//msg.push((byte)this.players.Count);
+			//this.players.ForEach(player =>
+			//{
+			//    msg.push(player.player_index);      // 누구인지 구분하기 위한 플레이어 인덱스.
 
-            //    // 플레이어가 소지한 세균들의 전체 개수.
-            //    byte cell_count = (byte)player.viruses.Count;
-            //    msg.push(cell_count);
-            //    // 플레이어의 세균들의 위치정보.
-            //    player.viruses.ForEach(position => msg.push_int16(position));
-            //});
-            //// 첫 턴을 진행할 플레이어 인덱스.
-            //msg.push(this.current_turn_player);
-            //broadcast(msg);
-            #endregion
+			//    // 플레이어가 소지한 세균들의 전체 개수.
+			//    byte cell_count = (byte)player.viruses.Count;
+			//    msg.push(cell_count);
+			//    // 플레이어의 세균들의 위치정보.
+			//    player.viruses.ForEach(position => msg.push_int16(position));
+			//});
+			//// 첫 턴을 진행할 플레이어 인덱스.
+			//msg.push(this.current_turn_player);
+			//broadcast(msg);
+			#endregion
 
 
-            // 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
+			// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
+			ResetGameData();
 
             // 게임 시작 메시지 전송.
             CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
 
-			// 플레이어들에게 선택창(캐릭터 픽) 전송
+			// 플레이어들에게 선택창(캐릭터 픽) 전송.
+			// 일단 랜덤으로 배치함
 			this.players.ForEach(player =>
 			{
-				
+				// 
+				msg.push()
 			});
 
             // 덱 셋팅 DeckSet
@@ -620,9 +627,44 @@ namespace BangServer
             return null;
         }
 
+		public void ResetGameData()
+        {
+			CharacterChoice();
+        }
+
 		public void CharacterChoice()
         {
+			List<string> TempCharList = new List<string>();
 
+			TempCharList.Add("Willy_The_Kid");
+			TempCharList.Add("Clamity_Janet");
+			TempCharList.Add("Kit_Carlson");
+			TempCharList.Add("Bart_Cassidy");
+			TempCharList.Add("Sid_Ketchum");
+
+			TempCharList.Add("Lucky_Duke");
+			TempCharList.Add("Jourdonnais");
+			TempCharList.Add("Black_Jack");
+			TempCharList.Add("Vulture_Sam");
+			TempCharList.Add("Jesse_Jones");
+
+			TempCharList.Add("Suzy_Lafayette");
+			TempCharList.Add("Pedro_Ramirez");
+			TempCharList.Add("Slab_The_Killer");
+			TempCharList.Add("Rose_Doolan");
+			TempCharList.Add("Paul_Regret");
+
+			TempCharList.Add("El_Gringo");
+
+			Characters = CharacterShuffle(TempCharList);
+		}
+
+		public List<string> CharacterShuffle(List<string> values)
+        {
+			Random rand = new Random();
+			var shuffled = values.OrderBy(_ => rand.Next()).ToList();
+
+			return shuffled;
         }
 
         // 유저 목록 및 배치 초기화
