@@ -213,11 +213,16 @@ namespace BangServer
 
 			// 플레이어들에게 선택창(캐릭터 픽) 전송.
 			// 일단 랜덤으로 배치함
-			this.players.ForEach(player =>
-			{
-				// 
-				msg.push()
-			});
+			//this.players.ForEach(player =>
+			//{
+			//	// 
+			//	msg.push()
+			//});
+
+			for(int i=0; i<players.Count; i++)
+            {
+				players[i].charName = Characters[i];
+            }
 
             // 덱 셋팅 DeckSet
             List<CCard> deck = new List<CCard>();
@@ -228,6 +233,7 @@ namespace BangServer
 			this.players.ForEach(player =>
 			{
 				msg.push(player.player_index);      // 플레이어 구분을 위한 플레이어 인덱스
+				msg.push(player.charName);
 			});
 			// 동기화는...?
 

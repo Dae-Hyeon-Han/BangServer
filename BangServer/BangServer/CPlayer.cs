@@ -14,6 +14,7 @@ namespace BangServer
 		public byte player_index { get; private set; }		// 플레이어를 분간하는 변수.
 		public string playerId { get; set; }					// 플레이어 아이디를 저장하는 변수
 		public string playerJob { get; set; }					// 플레이어 직업. 보안관, 무법자 등
+		public string charName { get; set; }					// 플레이어 캐릭터
 		public List<short> viruses { get; private set; }
 
 		public CPlayer(CGameUser user, byte player_index)
