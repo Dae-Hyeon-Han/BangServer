@@ -45,16 +45,19 @@ namespace BangServer
         // 누군가를 사격할 경우
         CHARACTERCHOICE = 11,
 
-        SHOT_REQ = 12,
+        // 카드 사용(string과 연계하여 사용할 것)
+        USECARD = 12,
+
+        SHOT_REQ = 13,
 
         // 인디언 사용
-        INDIANS_REQ = 13,
+        INDIANS_REQ = 15,
 
         // 기관총 사용
-        MACHINE_GUN_REQ = 15,
+        MACHINE_GUN_REQ = 17,
 
         // 결투 사용
-        DUEL_REQ = 17,
+        DUEL_REQ = 19,
 
         #endregion
     }
