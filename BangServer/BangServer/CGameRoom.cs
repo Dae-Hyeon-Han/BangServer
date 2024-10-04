@@ -693,10 +693,46 @@ namespace BangServer
 
         }
 
+		// 인디언 사용한 경우
 		public void UseIndian()
         {
 
         }
-        #endregion
-    }
+
+		// 머신건 사용한 경우
+		public void UseMachineGun()
+		{ 
+		}
+
+		// 잡화점 사용한 경우
+		public void UseGeneralStore()
+        {
+
+        }
+
+		// 웰스파고(count = 3), 역마차(count = 2) 사용시
+		public void UseGetCards(int count)
+        {
+
+        }
+
+		// 캣 벌로우 사용시
+		public void UseCatBalou()
+        {
+
+        }
+
+		// 맥주 사용시
+		public void UseBeer()
+        {
+
+        }
+
+		// 주점 사용시
+		public void UseSaloon()
+        {
+
+        }
+		#endregion
+	}
 }
