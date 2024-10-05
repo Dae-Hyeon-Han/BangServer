@@ -678,7 +678,7 @@ namespace BangServer
 		/// 어떤 플레이어가 BANG 사용했을 경우
 		/// </summary>
 		/// <param name="target_index">공격 대상 플레이어</param>
-		public void UseShot(byte target_index)
+		public void UseBang(byte target_index)
         {
 			// 플레이어 구분 어케함?
 			CPacket msg = CPacket.create((short)PROTOCOL.USECARD);

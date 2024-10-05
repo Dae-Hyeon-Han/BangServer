@@ -74,6 +74,18 @@ namespace BangServer
 						this.battle_room.moving_req(this.player, begin_pos, target_pos);
 					}
 					break;
+				case PROTOCOL.CHARACTERCHOICE:
+					{
+						// 캐릭터 선택 기능 활성화 시 사용할 것
+					}
+					break;
+				case PROTOCOL.USECARD:
+                    {
+						// 플레이어가 카드 소비, 장착할 경우 프로토콜
+						// 사용 카드는 string 형태로 구분할 것
+						//battle_room.UseBang
+                    }
+					break;
 
 				case PROTOCOL.TURN_FINISHED_REQ:
 					this.battle_room.turn_finished(this.player);
