@@ -675,7 +675,7 @@ namespace BangServer
         }
 
 		/// <summary>
-		/// 어떤 플레이어가 BANG 사용했을 경우
+		/// 어떤 플레이어가 BANG 사용했을 경우, 자신의 턴에.
 		/// </summary>
 		/// <param name="target_index">공격 대상 플레이어</param>
 		public void UseBang(byte target_index)

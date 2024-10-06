@@ -15,6 +15,7 @@ namespace BangServer
 		CUserToken token;
 
 		public CGameRoom battle_room { get; private set; }
+		public string playerId { get; set; }                    // 플레이어 아이디를 저장하는 변수
 
 		CPlayer player;
 
