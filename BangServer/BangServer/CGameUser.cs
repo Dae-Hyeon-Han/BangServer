@@ -61,6 +61,9 @@ namespace BangServer
 				case PROTOCOL.ENTER_GAME_ROOM_REQ:
                     //player.playerId = msg.pop_string();             // 플레이어가 왜 null이지?
                     //Console.WriteLine("플레이어 아이디: " + player.playerId);
+                    #region 아이디 인풋 기능 활성화시 사용
+                    //playerId = msg.pop_string();
+                    #endregion
                     Program.game_main.matching_req(this);
 					break;
 
