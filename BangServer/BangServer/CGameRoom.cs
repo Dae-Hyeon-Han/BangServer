@@ -694,46 +694,63 @@ namespace BangServer
 
         }
 
-		// 인디언 사용한 경우
-		public void UseIndian()
-        {
-
-        }
-
-		// 머신건 사용한 경우
-		public void UseMachineGun()
-		{ 
-		}
-
-		// 잡화점 사용한 경우
-		public void UseGeneralStore()
+		// 모든 플레이어에게 적용되는 카드 사용시
+		// 캣 벌로우, 인디언, 기관총, 잡화점, 주점 등
+		public void UseBroadCastCard()
         {
 
         }
 
 		// 웰스파고(count = 3), 역마차(count = 2) 사용시
 		public void UseGetCards(int count)
-        {
+		{
 
-        }
-
-		// 캣 벌로우 사용시
-		public void UseCatBalou()
-        {
-
-        }
+		}
 
 		// 맥주 사용시
 		public void UseBeer()
+		{
+
+		}
+
+		// 체력 깎는 경우(즉, 인디언이나 기관총 등에서 임의로 깎지말고, 클라이언트와 인터렉션 확인 후 처리할 것.)
+		public void MinusHp()
         {
 
         }
 
-		// 주점 사용시
-		public void UseSaloon()
-        {
+        #region 브로드캐스트 사용되는 메서드 예시
+  //      // 인디언 사용한 경우
+  //      public void UseIndian()
+  //      {
 
-        }
-		#endregion
-	}
+  //      }
+
+		//// 머신건 사용한 경우
+		//public void UseMachineGun()
+		//{ 
+		//}
+		
+
+		//// 잡화점 사용한 경우
+		//public void UseGeneralStore()
+  //      {
+
+  //      }
+
+
+		//// 캣 벌로우 사용시
+		//public void UseCatBalou()
+  //      {
+
+  //      }
+
+		//// 주점 사용시
+		//public void UseSaloon()
+  //      {
+
+  //      }
+        #endregion
+        #endregion
+    }
 }
