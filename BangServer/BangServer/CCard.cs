@@ -10,6 +10,6 @@ namespace BangServer
     {
         public string name;
         public string shape;
-        public int number;
+        public string number;
     }
 }

@@ -32,7 +32,7 @@ namespace BangServer
 		List<CPlayer> players;
 
 		// 플레잉 카드
-		List<CCard> deck;
+		//List<CCard> deck;
 
 		// 캐릭터 카드
 		List<string> Characters;
@@ -53,7 +53,12 @@ namespace BangServer
 
 		readonly short EMPTY_SLOT = short.MaxValue;
 
-		public CGameRoom()
+        #region 뱅 용
+        List<CCard> deck = new List<CCard>();
+
+        #endregion
+
+        public CGameRoom()
 		{
 			this.players = new List<CPlayer>();
 			this.player_state = new Dictionary<byte, PLAYER_STATE>();
@@ -182,59 +187,63 @@ namespace BangServer
 			Console.WriteLine("게임 시작!");
 
             #region 구버전
-            // 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
-            reset_gamedata();
+            //        // 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
+            //        reset_gamedata();
 
-            // 게임 시작 메시지 전송.
-            CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
-            // 플레이어들의 세균 위치 전송.
-            msg.push((byte)this.players.Count);
-            this.players.ForEach(player =>
-            {
-                msg.push(player.player_index);      // 누구인지 구분하기 위한 플레이어 인덱스.
+            //        // 게임 시작 메시지 전송.
+            //        CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
+            //        // 플레이어들의 세균 위치 전송.
+            //        msg.push((byte)this.players.Count);
+            //        this.players.ForEach(player =>
+            //        {
+            //            msg.push(player.player_index);      // 누구인지 구분하기 위한 플레이어 인덱스.
 
-                // 플레이어가 소지한 세균들의 전체 개수.
-                byte cell_count = (byte)player.viruses.Count;
-                msg.push(cell_count);
-                // 플레이어의 세균들의 위치정보.
-                player.viruses.ForEach(position => msg.push_int16(position));
-            });
-            // 첫 턴을 진행할 플레이어 인덱스.
-            msg.push(this.current_turn_player);
-            broadcast(msg);
+            //Console.WriteLine("인덱스: " + player.player_index);
+
+            //// 플레이어가 소지한 세균들의 전체 개수.
+            //byte cell_count = (byte)player.viruses.Count;
+            //            msg.push(cell_count);
+            //            // 플레이어의 세균들의 위치정보.
+            //            player.viruses.ForEach(position => msg.push_int16(position));
+            //        });
+            //        // 첫 턴을 진행할 플레이어 인덱스.
+            //        msg.push(this.current_turn_player);
+            //        broadcast(msg);
             #endregion
 
             #region 뱅 버전
-            //// 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
-            //ResetGameData();
+            // 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
+            ResetGameData();
 
-            //// 게임 시작 메시지 전송.
-            //CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
-            ////CPacket charNameMsg = CPacket.create((short)PROTOCOL.CHARACTERCHOICE);
+            // 게임 시작 메시지 전송.
+            CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
+            msg.push((byte)this.players.Count);
+            //CPacket charNameMsg = CPacket.create((short)PROTOCOL.CHARACTERCHOICE);
 
-            //// 플레이어들에게 선택창(캐릭터 픽) 전송.
-            //// 일단 랜덤으로 배치함
-            //for (int i = 0; i < players.Count; i++)
-            //{
-            //    players[i].charName = Characters[i];
-            //}
+            // 플레이어들에게 선택창(캐릭터 픽) 전송.(코드 x)
+            // 일단 랜덤으로 배치함
+            for (int i = 0; i < players.Count; i++)
+            {
+                players[i].charName = Characters[i];
+            }
 
-            //// 덱 셋팅 DeckSet
-            //List<CCard> deck = new List<CCard>();
-            //deck = DeckSet();
+            // 덱 셋팅 DeckSet
+            
+            deck = DeckSet();
 
 
-            //// 플레이어들이 선택한 캐릭터 전송
-            //this.players.ForEach(player =>
-            //{
-            //    msg.push(player.player_index);      // 플레이어 구분을 위한 플레이어 인덱스
-            //    msg.push(player.charName);
-            //});
-            //// 동기화는...?
+            // 플레이어들이 선택한 캐릭터 전송
+            this.players.ForEach(player =>
+            {
+                msg.push(player.player_index);      // 플레이어 구분을 위한 플레이어 인덱스
+                msg.push(player.charName);
+                //Console.WriteLine("인덱스: " + player.player_index);
+            });
+            // 동기화는...?
 
-            //// 첫턴을 시작할 플레이어 인덱스
-            //msg.push(this.current_turn_player);
-            //broadcast(msg);
+            // 첫턴을 시작할 플레이어 인덱스
+            msg.push(this.current_turn_player);
+            broadcast(msg);
             #endregion
         }
 
@@ -531,101 +540,647 @@ namespace BangServer
 		// 게임 시작시 덱 초기화
         public List<CCard> DeckSet()
         {
-			// 카드 생성. 숫자와 무늬는 랜덤 생성
-			for(int i=0; i<80; i++)
-            {
-				CCard card = new CCard();
+            #region 진짜 구버전
+            //         // 카드 생성. 숫자와 무늬는 랜덤 생성
+            //         for (int i=0; i<80; i++)
+            //         {
+            //	CCard card = new CCard();
 
-				if(i<25)
-                {
-					card.name = "Bang!";		// 뱅 * 25
-					
-                }
-				else if(i<37)
-                {
-					card.name = "Missed!";		// 빗나감 * 12
-                }
-				else if(i<43)
-                {
-					card.name = "Beer!";		// 맥주 * 6
-                }
-				else if(i<44)
-                {
-					card.name = "Gatling!";		// 기관총 * 1
-                }
-				else if(i<47)
-                {
-					card.name = "Duel!";		// 결투 * 3
-                }
-				else if(i<49)
-                {
-					card.name = "Indian!";		// 인디언 * 2
-                }
-				else if(i<50)
-                {
-					card.name = "Saloon!";		// 주점 * 1
-                }
-				else if (i < 54)
-				{
-					card.name = "Panic!";		// 강탈 * 4
-				}
-				else if (i < 58)
-				{
-					card.name = "Cat Balou!";	// 캣벌로우 * 4
-				}
-				else if (i < 60)
-				{
-					card.name = "General Store";	// 잡화점 * 2
-				}
-				else if (i < 62)
-				{
-					card.name = "Stagecoach";		// 역마차 * 2
-				}
-				else if (i < 63)
-				{
-					card.name = "Wells Fargo";       // 웰스파고 은행 * 1
-				}
-				else if (i < 66)
-				{
-					card.name = "Schofield";       // 스코필드(총) * 3
-				}
-				else if (i < 67)
-				{
-					card.name = "Remington";       // 레밍턴(총) * 1
-				}
-				else if (i < 68)
-				{
-					card.name = "Carabine";			// 카빈(총) * 1
-				}
-				else if (i < 69)
-				{
-					card.name = "Winchester";       // 윈체스터(총) * 1
-				}
-				else if (i < 71)
-				{
-					card.name = "Volcanic";			// 볼캐닉(총) * 2
-				}
-				else if (i < 72)
-				{
-					card.name = "Scope";			 // 조준경 * 1
-				}
-				else if (i < 74)
-				{
-					card.name = "Mustang";			// 야생마 * 2
-				}
-				else if (i < 76)
-				{
-					card.name = "Barrel";			 // 술통 * 2
-				}
-				else if (i < 79)
-				{
-					card.name = "Jail";				// 감옥 * 3
-				}
-				else if (i < 80)
-				{
-					card.name = "Dynamite";       // 다이너마이트 * 1
-				}
-			}
+            //	#region 덱 셋팅(구버전)
+            //	//if(i<25)
+            //	//            {
+            //	//	card.name = "Bang!";		// 뱅 * 25
+
+            //	//            }
+            //	//else if(i<37)
+            //	//            {
+            //	//	card.name = "Missed!";		// 빗나감 * 12
+            //	//            }
+            //	//else if(i<43)
+            //	//            {
+            //	//	card.name = "Beer!";		// 맥주 * 6
+            //	//            }
+            //	//else if(i<44)
+            //	//            {
+            //	//	card.name = "Gatling!";		// 기관총 * 1
+            //	//            }
+            //	//else if(i<47)
+            //	//            {
+            //	//	card.name = "Duel!";		// 결투 * 3
+            //	//            }
+            //	//else if(i<49)
+            //	//            {
+            //	//	card.name = "Indian!";		// 인디언 * 2
+            //	//            }
+            //	//else if(i<50)
+            //	//            {
+            //	//	card.name = "Saloon!";		// 주점 * 1
+            //	//            }
+            //	//else if (i < 54)
+            //	//{
+            //	//	card.name = "Panic!";		// 강탈 * 4
+            //	//}
+            //	//else if (i < 58)
+            //	//{
+            //	//	card.name = "Cat Balou!";	// 캣벌로우 * 4
+            //	//}
+            //	//else if (i < 60)
+            //	//{
+            //	//	card.name = "General Store";	// 잡화점 * 2
+            //	//}
+            //	//else if (i < 62)
+            //	//{
+            //	//	card.name = "Stagecoach";		// 역마차 * 2
+            //	//}
+            //	//else if (i < 63)
+            //	//{
+            //	//	card.name = "Wells Fargo";       // 웰스파고 은행 * 1
+            //	//}
+            //	//else if (i < 66)
+            //	//{
+            //	//	card.name = "Schofield";       // 스코필드(총) * 3
+            //	//}
+            //	//else if (i < 67)
+            //	//{
+            //	//	card.name = "Remington";       // 레밍턴(총) * 1
+            //	//}
+            //	//else if (i < 68)
+            //	//{
+            //	//	card.name = "Carabine";			// 카빈(총) * 1
+            //	//}
+            //	//else if (i < 69)
+            //	//{
+            //	//	card.name = "Winchester";       // 윈체스터(총) * 1
+            //	//}
+            //	//else if (i < 71)
+            //	//{
+            //	//	card.name = "Volcanic";			// 볼캐닉(총) * 2
+            //	//}
+            //	//else if (i < 72)
+            //	//{
+            //	//	card.name = "Scope";			 // 조준경 * 1
+            //	//}
+            //	//else if (i < 74)
+            //	//{
+            //	//	card.name = "Mustang";			// 야생마 * 2
+            //	//}
+            //	//else if (i < 76)
+            //	//{
+            //	//	card.name = "Barrel";			 // 술통 * 2
+            //	//}
+            //	//else if (i < 79)
+            //	//{
+            //	//	card.name = "Jail";				// 감옥 * 3
+            //	//}
+            //	//else if (i < 80)
+            //	//{
+            //	//	card.name = "Dynamite";       // 다이너마이트 * 1
+            //	//}
+            //	#endregion
+
+            //	//deck.Add()
+            //}
+            #endregion
+
+            #region 카드 객체 생성 0 ~79
+            CCard card0 = new CCard();
+			CCard card1 = new CCard();
+			CCard card2 = new CCard();
+			CCard card3 = new CCard();
+			CCard card4 = new CCard();
+			CCard card5 = new CCard();
+			CCard card6 = new CCard();
+			CCard card7 = new CCard();
+			CCard card8 = new CCard();
+			CCard card9 = new CCard();
+			CCard card10 = new CCard();
+			CCard card11 = new CCard();
+			CCard card12 = new CCard();
+			CCard card13 = new CCard();
+			CCard card14 = new CCard();
+			CCard card15 = new CCard();
+			CCard card16 = new CCard();
+			CCard card17 = new CCard();
+			CCard card18 = new CCard();
+			CCard card19 = new CCard();
+			CCard card20 = new CCard();
+			CCard card21 = new CCard();
+			CCard card22 = new CCard();
+			CCard card23 = new CCard();
+			CCard card24 = new CCard();
+			CCard card25 = new CCard();
+			CCard card26 = new CCard();
+			CCard card27 = new CCard();
+			CCard card28 = new CCard();
+			CCard card29 = new CCard();
+			CCard card30 = new CCard();
+			CCard card31 = new CCard();
+			CCard card32 = new CCard();
+			CCard card33 = new CCard();
+			CCard card34 = new CCard();
+			CCard card35 = new CCard();
+			CCard card36 = new CCard();
+			CCard card37 = new CCard();
+			CCard card38 = new CCard();
+			CCard card39 = new CCard();
+			CCard card40 = new CCard();
+			CCard card41 = new CCard();
+			CCard card42 = new CCard();
+			CCard card43 = new CCard();
+			CCard card44 = new CCard();
+			CCard card45 = new CCard();
+			CCard card46 = new CCard();
+			CCard card47 = new CCard();
+			CCard card48 = new CCard();
+			CCard card49 = new CCard();
+			CCard card50 = new CCard();
+			CCard card51 = new CCard();
+			CCard card52 = new CCard();
+			CCard card53 = new CCard();
+			CCard card54 = new CCard();
+			CCard card55 = new CCard();
+			CCard card56 = new CCard();
+			CCard card57 = new CCard();
+			CCard card58 = new CCard();
+			CCard card59 = new CCard();
+			CCard card60 = new CCard();
+			CCard card61 = new CCard();
+			CCard card62 = new CCard();
+			CCard card63 = new CCard();
+			CCard card64 = new CCard();
+			CCard card65 = new CCard();
+			CCard card66 = new CCard();
+			CCard card67 = new CCard();
+			CCard card68 = new CCard();
+			CCard card69 = new CCard();
+			CCard card70 = new CCard();
+			CCard card71 = new CCard();
+			CCard card72 = new CCard();
+			CCard card73 = new CCard();
+			CCard card74 = new CCard();
+			CCard card75 = new CCard();
+			CCard card76 = new CCard();
+			CCard card77 = new CCard();
+			CCard card78 = new CCard();
+			CCard card79 = new CCard();
+            #endregion
+
+            #region 뱅 카드 목록(0~24/ 총 25)
+            card0.name = "BANG";
+			card0.shape = "HEART";
+			card0.number = "Q";
+
+			card1.name = "BANG";
+			card1.shape = "HEART";
+			card1.number = "K";
+
+			card2.name = "BANG";
+			card2.shape = "HEART";
+			card2.number = "A";
+
+			card3.name = "BANG";
+			card3.shape = "DIAMOND";
+			card3.number = "2";
+
+			card4.name = "BANG";
+			card4.shape = "DIAMOND";
+			card4.number = "3";
+
+			card5.name = "BANG";
+			card5.shape = "DIAMOND";
+			card5.number = "4";
+
+			card6.name = "BANG";
+			card6.shape = "DIAMOND";
+			card6.number = "5";
+
+			card7.name = "BANG";
+			card7.shape = "DIAMOND";
+			card7.number = "6";
+
+			card8.name = "BANG";
+			card8.shape = "DIAMOND";
+			card8.number = "7";
+
+			card9.name = "BANG";
+			card9.shape = "DIAMOND";
+			card9.number = "8";
+
+			card10.name = "BANG";
+			card10.shape = "DIAMOND";
+			card10.number = "9";
+
+			card11.name = "BANG";
+			card11.shape = "DIAMOND";
+			card11.number = "10";
+
+			card12.name = "BANG";
+			card12.shape = "DIAMOND";
+			card12.number = "J";
+
+			card13.name = "BANG";
+			card13.shape = "DIAMOND";
+			card13.number = "Q";
+
+			card14.name = "BANG";
+			card14.shape = "DIAMOND";
+			card14.number = "K";
+
+			card15.name = "BANG";
+			card15.shape = "DIAMOND";
+			card15.number = "A";
+
+			card16.name = "BANG";
+			card16.shape = "CLOVER";
+			card16.number = "2";
+
+			card17.name = "BANG";
+			card17.shape = "CLOVER";
+			card17.number = "3";
+
+			card18.name = "BANG";
+			card18.shape = "CLOVER";
+			card18.number = "4";
+
+			card19.name = "BANG";
+			card19.shape = "CLOVER";
+			card19.number = "5";
+
+			card20.name = "BANG";
+			card20.shape = "CLOVER";
+			card20.number = "6";
+
+			card21.name = "BANG";
+			card21.shape = "CLOVER";
+			card21.number = "7";
+
+			card22.name = "BANG";
+			card22.shape = "CLOVER";
+			card22.number = "8";
+
+			card23.name = "BANG";
+			card23.shape = "CLOVER";
+			card23.number = "9";
+
+			card24.name = "BANG";
+			card24.shape = "SPADE";
+			card24.number = "A";
+			#endregion
+
+			#region 빗나감 카드 목록(25~36/ 총 12)
+			card25.name = "MISSED";
+			card25.shape = "SPADE";
+			card25.number = "2";
+
+			card26.name = "MISSED";
+			card26.shape = "SPADE";
+			card26.number = "3";
+
+			card27.name = "MISSED";
+			card27.shape = "SPADE";
+			card27.number = "4";
+
+			card28.name = "MISSED";
+			card28.shape = "SPADE";
+			card28.number = "5";
+
+			card29.name = "MISSED";
+			card29.shape = "SPADE";
+			card29.number = "6";
+
+			card30.name = "MISSED";
+			card30.shape = "SPADE";
+			card30.number = "7";
+
+			card31.name = "MISSED";
+			card31.shape = "SPADE";
+			card31.number = "8";
+
+			card32.name = "MISSED";
+			card32.shape = "CLOVER";
+			card32.number = "10";
+
+			card33.name = "MISSED";
+			card33.shape = "CLOVER";
+			card33.number = "J";
+
+			card34.name = "MISSED";
+			card34.shape = "CLOVER";
+			card34.number = "Q";
+
+			card35.name = "MISSED";
+			card35.shape = "CLOVER";
+			card35.number = "K";
+
+			card36.name = "MISSED";
+			card36.shape = "CLOVER";
+			card36.number = "A";
+			#endregion
+
+			#region 맥주 카드 목록(37~42 / 총 6)
+			card37.name = "BEER";
+			card37.shape = "HEART";
+			card37.number = "6";
+
+			card38.name = "BEER";
+			card38.shape = "HEART";
+			card38.number = "7";
+
+			card39.name = "BEER";
+			card39.shape = "HEART";
+			card39.number = "8";
+
+			card40.name = "BEER";
+			card40.shape = "HEART";
+			card40.number = "9";
+
+			card41.name = "BEER";
+			card41.shape = "HEART";
+			card41.number = "10";
+
+			card42.name = "BEER";
+			card42.shape = "HEART";
+			card42.number = "J";
+			#endregion
+
+			#region 기관총 카드 목록(43 / 총 1)
+			card43.name = "GATLING";
+			card43.shape = "HEART";
+			card43.number = "10";
+			#endregion
+
+			#region 결투 카드 목록(44~46 / 총 3)
+			card44.name = "DUAL";
+			card44.shape = "DIAMOND";
+			card44.number = "Q";
+			
+			card45.name = "DUAL";
+			card45.shape = "CLOVER";
+			card45.number = "8";
+
+			card46.name = "DUAL";
+			card46.shape = "SPADE";
+			card46.number = "J";
+			#endregion
+
+			#region 인디언 카드 목록(47~48 / 총 2)
+			card47.name = "INDIANS";
+			card47.shape = "DIAMOND";
+			card47.number = "K";
+
+			card48.name = "INDIANS";
+			card48.shape = "DIAMOND";
+			card48.number = "A";
+			#endregion
+
+			#region 주점 카드 목록 (49 / 총 1)
+			card49.name = "SALOON";
+			card49.shape = "HEART";
+			card49.number = "5";
+			#endregion
+
+			#region 강탈 카드 목록 (50~53 / 총 4)
+			card50.name = "PANIC";
+			card50.shape = "DIAMOND";
+			card50.number = "8";
+
+			card51.name = "PANIC";
+			card51.shape = "HEART";
+			card51.number = "J";
+
+			card52.name = "PANIC";
+			card52.shape = "HEART";
+			card52.number = "Q";
+
+			card53.name = "PANIC";
+			card53.shape = "HEART";
+			card53.number = "A";
+			#endregion
+
+			#region 캣 벌로우 카드 목록(54~57 / 총 4)
+			card54.name = "CAT BALOU";
+			card54.shape = "DIAMOND";
+			card54.number = "9";
+
+			card55.name = "CAT BALOU";
+			card55.shape = "DIAMOND";
+			card55.number = "10";
+
+			card56.name = "CAT BALOU";
+			card56.shape = "DIAMOND";
+			card56.number = "J";
+
+			card57.name = "CAT BALOU";
+			card57.shape = "HEART";
+			card57.number = "K";
+			#endregion
+
+			#region 잡화점 카드 목록(58~59 / 총 2)
+			card58.name = "GENERAL STORE";
+			card58.shape = "CLOVER";
+			card58.number = "9";
+
+			card59.name = "GENERAL STORE";
+			card59.shape = "SPADE";
+			card59.number = "Q";
+			#endregion
+
+			#region 역마차 카드 목록(60~61 / 총 2)
+			card60.name = "STAGECOACH";
+			card60.shape = "CLOVER";
+			card60.number = "9";
+
+			card61.name = "STAGECOACH";
+			card61.shape = "SPADE";
+			card61.number = "9";
+			#endregion
+
+			#region 웰스파고 은행 카드 목록(62 / 총 1)
+			card62.name = "WELLS FARGO";
+			card62.shape = "HEART";
+			card62.number = "3";
+			#endregion
+
+			/*  여기서부터 장착 카드  */
+
+			#region 스코필드 카드 목록(63~65 / 총 3)
+			card63.name = "SCHOFIELD";
+			card63.shape = "CLOVER";
+			card63.number = "J";
+
+			card64.name = "SCHOFIELD";
+			card64.shape = "CLOVER";
+			card64.number = "Q";
+
+			card65.name = "SCHOFIELD";
+			card65.shape = "SPADE";
+			card65.number = "K";
+			#endregion
+
+			#region 레밍턴 카드 목록(66 / 총 1)
+			card66.name = "REMINGTON";
+			card66.shape = "CLOVER";
+			card66.number = "K";
+			#endregion
+
+			#region 카빈 카드 목록(67 / 총 1)
+			card67.name = "CARABINE";
+			card67.shape = "CLOVER";
+			card67.number = "A";
+			#endregion
+
+			#region 윈체스터 카드 목록(68 / 총 1)
+			card68.name = "WINCHESTER";
+			card68.shape = "SPADE";
+			card68.number = "8";
+			#endregion
+
+			#region 볼캐닉 카드 목록(69~70 / 총 2)
+			card69.name = "VOLCANIC";
+			card69.shape = "SPADE";
+			card69.number = "10";
+
+			card70.name = "VOLCANIC";
+			card70.shape = "CLOVER";
+			card70.number = "10";
+			#endregion
+
+			#region 조준경 카드 목록(71 / 총 1)
+			card71.name = "SCOPE";
+			card71.shape = "SPADE";
+			card71.number = "A";
+			#endregion
+
+			#region 야생마 카드 목록(72~73 / 총 2)
+			card72.name = "MUSTANG";
+			card72.shape = "HEART";
+			card72.number = "8";
+
+			card73.name = "MUSTANG";
+			card73.shape = "HEART";
+			card73.number = "9";
+			#endregion
+
+			#region 술통 카드 목록(74~75 / 총 2)
+			card74.name = "BARREL";
+			card74.shape = "HEART";
+			card74.number = "Q";
+
+			card75.name = "BARREL";
+			card75.shape = "HEART";
+			card75.number = "K";
+			#endregion
+
+			#region 감옥 카드 목록(76~78 / 총 3)
+			card76.name = "JAIL";
+			card76.shape = "HEART";
+			card76.number = "4";
+
+			card77.name = "JAIL";
+			card77.shape = "SPADE";
+			card77.number = "10";
+
+			card78.name = "JAIL";
+			card78.shape = "SPADE";
+			card78.number = "J";
+			#endregion
+
+			#region 다이너마이트 카드 목록(79 / 총 1)
+			card79.name = "DYNAMITE";
+			card79.shape = "HEART";
+			card79.number = "2";
+            #endregion
+
+            #region 덱에 카드 삽입
+            deck.Add(card0);
+			deck.Add(card1);
+			deck.Add(card2);
+			deck.Add(card3);
+			deck.Add(card4);
+			deck.Add(card5);
+			deck.Add(card6);
+			deck.Add(card7);
+			deck.Add(card8);
+			deck.Add(card9);
+
+			deck.Add(card10);
+			deck.Add(card11);
+			deck.Add(card12);
+			deck.Add(card13);
+			deck.Add(card14);
+			deck.Add(card15);
+			deck.Add(card16);
+			deck.Add(card17);
+			deck.Add(card18);
+			deck.Add(card19);
+
+			deck.Add(card20);
+			deck.Add(card21);
+			deck.Add(card22);
+			deck.Add(card23);
+			deck.Add(card24);
+			deck.Add(card25);
+			deck.Add(card26);
+			deck.Add(card27);
+			deck.Add(card28);
+			deck.Add(card29);
+
+			deck.Add(card30);
+			deck.Add(card31);
+			deck.Add(card32);
+			deck.Add(card33);
+			deck.Add(card34);
+			deck.Add(card35);
+			deck.Add(card36);
+			deck.Add(card37);
+			deck.Add(card38);
+			deck.Add(card39);
+
+			deck.Add(card40);
+			deck.Add(card41);
+			deck.Add(card42);
+			deck.Add(card43);
+			deck.Add(card44);
+			deck.Add(card45);
+			deck.Add(card46);
+			deck.Add(card47);
+			deck.Add(card48);
+			deck.Add(card49);
+
+			deck.Add(card50);
+			deck.Add(card51);
+			deck.Add(card52);
+			deck.Add(card53);
+			deck.Add(card54);
+			deck.Add(card55);
+			deck.Add(card56);
+			deck.Add(card57);
+			deck.Add(card58);
+			deck.Add(card59);
+
+			deck.Add(card60);
+			deck.Add(card61);
+			deck.Add(card62);
+			deck.Add(card63);
+			deck.Add(card64);
+			deck.Add(card65);
+			deck.Add(card66);
+			deck.Add(card67);
+			deck.Add(card68);
+			deck.Add(card69);
+
+			deck.Add(card70);
+			deck.Add(card71);
+			deck.Add(card72);
+			deck.Add(card73);
+			deck.Add(card74);
+			deck.Add(card75);
+			deck.Add(card76);
+			deck.Add(card77);
+			deck.Add(card78);
+			deck.Add(card79);
+            #endregion
+
             return null;
         }
 
@@ -662,6 +1217,14 @@ namespace BangServer
 		}
 
 		public List<string> CharacterShuffle(List<string> values)
+        {
+			Random rand = new Random();
+			var shuffled = values.OrderBy(_ => rand.Next()).ToList();
+
+			return shuffled;
+        }
+
+		public List<CCard> CardShuffle(List<CCard> values)
         {
 			Random rand = new Random();
 			var shuffled = values.OrderBy(_ => rand.Next()).ToList();
@@ -751,6 +1314,11 @@ namespace BangServer
 
   //      }
         #endregion
+
+		public void TurnEnd()
+        {
+
+        }
         #endregion
     }
 }
