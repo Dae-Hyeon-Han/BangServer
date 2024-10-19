@@ -30,6 +30,7 @@ namespace BangServer
 
 		// 게임을 진행하는 플레이어. 1P, 2P가 존재한다.
 		List<CPlayer> players;
+		List<CPlayer> livingPlayers;
 
 		// 플레잉 카드
 		//List<CCard> deck;
@@ -61,6 +62,7 @@ namespace BangServer
         public CGameRoom()
 		{
 			this.players = new List<CPlayer>();
+			this.livingPlayers = players;
 			this.player_state = new Dictionary<byte, PLAYER_STATE>();
 			this.current_turn_player = 0;
 
@@ -1315,10 +1317,67 @@ namespace BangServer
   //      }
         #endregion
 
-		public void TurnEnd()
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"> 턴 종료 버튼을 누른 플레이어의 인덱스 번호 </param>
+		public void TurnEnd(byte index)
         {
+			Console.WriteLine(index + "의 턴 종료");
 
-        }
+            #region 구버전
+            //// 보드판 상태를 확인하여 게임이 끝났는지 검사한다.
+            //if (!CHelper.can_play_more(this.table_board, get_opponent_player(), this.players))
+            //{
+            //	game_over();
+            //	return;
+            //}
+
+            //// 아직 게임이 끝나지 않았다면 다음 플레이어로 턴을 넘긴다.
+            //if (this.current_turn_player < this.players.Count - 1)
+            //{
+            //	++this.current_turn_player;
+            //}
+            //else
+            //{
+            //	// 다시 첫번째 플레이어의 턴으로 만들어 준다.
+            //	this.current_turn_player = this.players[0].player_index;
+            //}
+            #endregion
+
+            while(true)
+            {
+				// 맨 끝 인덱스인지 먼저 확인
+				if(index == livingPlayers.Count)
+                {
+					index++;
+                }
+				// 살아있는 플레이어 중 맨 끝 인덱스가 아니라면.
+				else
+                {
+					index++;
+					break;
+                }
+            }
+
+            // 턴을 시작한다.
+            TurnStart(index);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"> 곧 시작하게 될 플레이어 </param>
+		public void TurnStart(byte index)
+        {
+			Console.WriteLine(index + "의 턴 시작");
+			// 턴을 진행할 수 있도록 준비 상태로 만든다.
+			this.livingPlayers.ForEach(player => change_playerstate(player, PLAYER_STATE.READY_TO_TURN));
+
+			CPacket msg = CPacket.create((short)PROTOCOL.START_PLAYER_TURN);
+			msg.push(this.current_turn_player);
+			broadcast(msg);
+		}
         #endregion
     }
 }

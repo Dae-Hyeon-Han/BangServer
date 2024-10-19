@@ -92,7 +92,9 @@ namespace BangServer
 					break;
 
 				case PROTOCOL.TURN_FINISHED_REQ:
-					this.battle_room.turn_finished(this.player);
+					//this.battle_room.turn_finished(this.player);
+					byte index = msg.pop_byte();
+					this.battle_room.TurnEnd(index);
 					break;
 			}
 		}
