@@ -14,18 +14,31 @@ namespace BangServer
         public byte player_index { get; private set; }      // 플레이어를 분간하는 변수.
                                                             //public string playerId { get; set; }					// 플레이어 아이디를 저장하는 변수
         public string playerJob { get; set; }                   // 플레이어 직업. 보안관, 무법자 등
-        public string charName { get; set; }                    // 플레이어 캐릭터
-        private int live;
-        public int Live
+        public string charName { get; set; }                    // 플레이어 캐릭터. 근데 public 인데 get,set, 쓰는 의미가 있나?
+        private int maxLife;
+
+        public int MaxLife
         {
-            get { return live; }
+            get { return maxLife; }
+            set { maxLife = value; }
+        }
+        
+        private int life;
+        public int Life
+        {
+            get { return life; }
             set
             {
-                live = value;
-                if(live <= 0)
+                life = value;
+                if(life <= 0)
                 {
                     // 플레이어 사망 시
                     Console.WriteLine("여기에 사망시 쓰일 메서드 기술");
+                }
+                else if(life >= maxLife)
+                {
+                    // 최대치 이상으로 체력 회복 방지
+                    life = maxLife;
                 }
             }
         }

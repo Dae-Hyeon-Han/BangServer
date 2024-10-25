@@ -35,14 +35,10 @@ namespace BangServer
 		// 플레잉 카드
 		//List<CCard> deck;
 
-		// 캐릭터 카드
-		List<string> Characters;
 
 		// 플레이어들의 상태를 관리하는 변수.
 		Dictionary<byte, PLAYER_STATE> player_state;
 
-		// 현재 턴을 진행하고 있는 플레이어의 인덱스.
-		byte current_turn_player;
 
 		// 게임 보드판.
 		List<short> gameboard;
@@ -55,8 +51,14 @@ namespace BangServer
 		readonly short EMPTY_SLOT = short.MaxValue;
 
         #region 뱅 용
+		// 캐릭터 카드
+		List<string> Characters;
         List<CCard> deck = new List<CCard>();
+		List<string> job = new List<string>();
+		//List<job> job = new List<job>();
 
+		// 현재 턴을 진행하고 있는 플레이어의 인덱스.
+		byte current_turn_player;
         #endregion
 
         public CGameRoom()
@@ -151,6 +153,8 @@ namespace BangServer
 			{
 				CPacket msg = CPacket.create((Int16)PROTOCOL.START_LOADING);
 				msg.push(player.player_index);  // 본인의 플레이어 인덱스를 알려준다.
+				// 캐릭터 입력
+				// 라이프 입력
 				player.send(msg);
 			});
 
@@ -188,31 +192,6 @@ namespace BangServer
 		{
 			Console.WriteLine("게임 시작!");
 
-            #region 구버전
-            //        // 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
-            //        reset_gamedata();
-
-            //        // 게임 시작 메시지 전송.
-            //        CPacket msg = CPacket.create((short)PROTOCOL.GAME_START);
-            //        // 플레이어들의 세균 위치 전송.
-            //        msg.push((byte)this.players.Count);
-            //        this.players.ForEach(player =>
-            //        {
-            //            msg.push(player.player_index);      // 누구인지 구분하기 위한 플레이어 인덱스.
-
-            //Console.WriteLine("인덱스: " + player.player_index);
-
-            //// 플레이어가 소지한 세균들의 전체 개수.
-            //byte cell_count = (byte)player.viruses.Count;
-            //            msg.push(cell_count);
-            //            // 플레이어의 세균들의 위치정보.
-            //            player.viruses.ForEach(position => msg.push_int16(position));
-            //        });
-            //        // 첫 턴을 진행할 플레이어 인덱스.
-            //        msg.push(this.current_turn_player);
-            //        broadcast(msg);
-            #endregion
-
             #region 뱅 버전
             // 게임을 새로 시작할 때 마다 초기화해줘야 할 것들.
             ResetGameData();
@@ -223,11 +202,20 @@ namespace BangServer
             //CPacket charNameMsg = CPacket.create((short)PROTOCOL.CHARACTERCHOICE);
 
             // 플레이어들에게 선택창(캐릭터 픽) 전송.(코드 x)
+			// 캐릭터별 라이프도 보낼 것(추가 예정)
             // 일단 랜덤으로 배치함
             for (int i = 0; i < players.Count; i++)
             {
                 players[i].charName = Characters[i];
-            }
+				players[i].playerJob = job[i];
+				players[i].MaxLife = 4;						// 추후 변경 예정(보안관+1, 폴 리그리트와 엘 그링고는 -1)
+
+				if(Characters[i] == "Paul_Regret" || Characters[i] == "El_Gringo")
+					players[i].MaxLife--;
+
+				if (job[i] == "SCERIFFO")
+					players[i].MaxLife++;
+			}
 
             // 덱 셋팅 DeckSet
             
@@ -239,6 +227,8 @@ namespace BangServer
             {
                 msg.push(player.player_index);      // 플레이어 구분을 위한 플레이어 인덱스
                 msg.push(player.charName);
+				msg.push(player.playerJob);         // 캐릭터의 생명력 push 해줄 것
+				msg.push(player.MaxLife);			// 캐릭터의 직업 push 해줄 것
                 //Console.WriteLine("인덱스: " + player.player_index);
             });
             // 동기화는...?
@@ -830,77 +820,77 @@ namespace BangServer
 			#endregion
 
 			#region 빗나감 카드 목록(25~36/ 총 12)
-			card25.name = "MISSED";
+			card25.name = "MANCATO";
 			card25.shape = "SPADE";
 			card25.number = "2";
 
-			card26.name = "MISSED";
+			card26.name = "MANCATO";
 			card26.shape = "SPADE";
 			card26.number = "3";
 
-			card27.name = "MISSED";
+			card27.name = "MANCATO";
 			card27.shape = "SPADE";
 			card27.number = "4";
 
-			card28.name = "MISSED";
+			card28.name = "MANCATO";
 			card28.shape = "SPADE";
 			card28.number = "5";
 
-			card29.name = "MISSED";
+			card29.name = "MANCATO";
 			card29.shape = "SPADE";
 			card29.number = "6";
 
-			card30.name = "MISSED";
+			card30.name = "MANCATO";
 			card30.shape = "SPADE";
 			card30.number = "7";
 
-			card31.name = "MISSED";
+			card31.name = "MANCATO";
 			card31.shape = "SPADE";
 			card31.number = "8";
 
-			card32.name = "MISSED";
+			card32.name = "MANCATO";
 			card32.shape = "CLOVER";
 			card32.number = "10";
 
-			card33.name = "MISSED";
+			card33.name = "MANCATO";
 			card33.shape = "CLOVER";
 			card33.number = "J";
 
-			card34.name = "MISSED";
+			card34.name = "MANCATO";
 			card34.shape = "CLOVER";
 			card34.number = "Q";
 
-			card35.name = "MISSED";
+			card35.name = "MANCATO";
 			card35.shape = "CLOVER";
 			card35.number = "K";
 
-			card36.name = "MISSED";
+			card36.name = "MANCATO";
 			card36.shape = "CLOVER";
 			card36.number = "A";
 			#endregion
 
 			#region 맥주 카드 목록(37~42 / 총 6)
-			card37.name = "BEER";
+			card37.name = "BIRRA";
 			card37.shape = "HEART";
 			card37.number = "6";
 
-			card38.name = "BEER";
+			card38.name = "BIRRA";
 			card38.shape = "HEART";
 			card38.number = "7";
 
-			card39.name = "BEER";
+			card39.name = "BIRRA";
 			card39.shape = "HEART";
 			card39.number = "8";
 
-			card40.name = "BEER";
+			card40.name = "BIRRA";
 			card40.shape = "HEART";
 			card40.number = "9";
 
-			card41.name = "BEER";
+			card41.name = "BIRRA";
 			card41.shape = "HEART";
 			card41.number = "10";
 
-			card42.name = "BEER";
+			card42.name = "BIRRA";
 			card42.shape = "HEART";
 			card42.number = "J";
 			#endregion
@@ -912,25 +902,25 @@ namespace BangServer
 			#endregion
 
 			#region 결투 카드 목록(44~46 / 총 3)
-			card44.name = "DUAL";
+			card44.name = "DUELLO";
 			card44.shape = "DIAMOND";
 			card44.number = "Q";
 			
-			card45.name = "DUAL";
+			card45.name = "DUELLO";
 			card45.shape = "CLOVER";
 			card45.number = "8";
 
-			card46.name = "DUAL";
+			card46.name = "DUELLO";
 			card46.shape = "SPADE";
 			card46.number = "J";
 			#endregion
 
 			#region 인디언 카드 목록(47~48 / 총 2)
-			card47.name = "INDIANS";
+			card47.name = "INDIANI";
 			card47.shape = "DIAMOND";
 			card47.number = "K";
 
-			card48.name = "INDIANS";
+			card48.name = "INDIANI";
 			card48.shape = "DIAMOND";
 			card48.number = "A";
 			#endregion
@@ -942,19 +932,19 @@ namespace BangServer
 			#endregion
 
 			#region 강탈 카드 목록 (50~53 / 총 4)
-			card50.name = "PANIC";
+			card50.name = "PANICO";
 			card50.shape = "DIAMOND";
 			card50.number = "8";
 
-			card51.name = "PANIC";
+			card51.name = "PANICO";
 			card51.shape = "HEART";
 			card51.number = "J";
 
-			card52.name = "PANIC";
+			card52.name = "PANICO";
 			card52.shape = "HEART";
 			card52.number = "Q";
 
-			card53.name = "PANIC";
+			card53.name = "PANICO";
 			card53.shape = "HEART";
 			card53.number = "A";
 			#endregion
@@ -978,21 +968,21 @@ namespace BangServer
 			#endregion
 
 			#region 잡화점 카드 목록(58~59 / 총 2)
-			card58.name = "GENERAL STORE";
+			card58.name = "EMPORIO";
 			card58.shape = "CLOVER";
 			card58.number = "9";
 
-			card59.name = "GENERAL STORE";
+			card59.name = "EMPORIO";
 			card59.shape = "SPADE";
 			card59.number = "Q";
 			#endregion
 
 			#region 역마차 카드 목록(60~61 / 총 2)
-			card60.name = "STAGECOACH";
+			card60.name = "DILIGENZA";
 			card60.shape = "CLOVER";
 			card60.number = "9";
 
-			card61.name = "STAGECOACH";
+			card61.name = "DILIGENZA";
 			card61.shape = "SPADE";
 			card61.number = "9";
 			#endregion
@@ -1048,7 +1038,7 @@ namespace BangServer
 			#endregion
 
 			#region 조준경 카드 목록(71 / 총 1)
-			card71.name = "SCOPE";
+			card71.name = "MIRONO";
 			card71.shape = "SPADE";
 			card71.number = "A";
 			#endregion
@@ -1064,31 +1054,31 @@ namespace BangServer
 			#endregion
 
 			#region 술통 카드 목록(74~75 / 총 2)
-			card74.name = "BARREL";
+			card74.name = "BARILE";
 			card74.shape = "HEART";
 			card74.number = "Q";
 
-			card75.name = "BARREL";
+			card75.name = "BARILE";
 			card75.shape = "HEART";
 			card75.number = "K";
 			#endregion
 
 			#region 감옥 카드 목록(76~78 / 총 3)
-			card76.name = "JAIL";
+			card76.name = "PRIGIONE";
 			card76.shape = "HEART";
 			card76.number = "4";
 
-			card77.name = "JAIL";
+			card77.name = "PRIGIONE";
 			card77.shape = "SPADE";
 			card77.number = "10";
 
-			card78.name = "JAIL";
+			card78.name = "PRIGIONE";
 			card78.shape = "SPADE";
 			card78.number = "J";
 			#endregion
 
 			#region 다이너마이트 카드 목록(79 / 총 1)
-			card79.name = "DYNAMITE";
+			card79.name = "DINAMITE";
 			card79.shape = "HEART";
 			card79.number = "2";
             #endregion
@@ -1189,7 +1179,9 @@ namespace BangServer
 		public void ResetGameData()
         {
 			CharacterChoice();
-        }
+			JobChoice();
+
+		}
 
 		public void CharacterChoice()
         {
@@ -1218,7 +1210,43 @@ namespace BangServer
 			Characters = CharacterShuffle(TempCharList);
 		}
 
+
 		public List<string> CharacterShuffle(List<string> values)
+        {
+			Random rand = new Random();
+			var shuffled = values.OrderBy(_ => rand.Next()).ToList();
+
+			return shuffled;
+        }
+
+		public void JobChoice()
+        {
+            List<string> tempJobs = new List<string>();
+
+            tempJobs.Add("SCERIFFO");       // 보안관
+            tempJobs.Add("VICE");           // 부관
+            tempJobs.Add("VICE");
+            tempJobs.Add("FUORILEGGE");     // 무법자
+            tempJobs.Add("FUORILEGGE");
+            tempJobs.Add("FUORILEGGE");
+            tempJobs.Add("RINNEGATO");      // 배신자
+
+            job = JobShuffle(tempJobs);
+
+            //List<job> tempJobs = new List<job>();
+
+            //tempJobs.Add();
+        }
+
+		public List<job> JobShuffle(List<job> values)
+		{
+			Random rand = new Random();
+			var shuffled = values.OrderBy(_ => rand.Next()).ToList();
+
+			return shuffled;
+		}
+
+		public List<string> JobShuffle(List<string> values)
         {
 			Random rand = new Random();
 			var shuffled = values.OrderBy(_ => rand.Next()).ToList();
@@ -1316,6 +1344,19 @@ namespace BangServer
 
   //      }
         #endregion
+
+		public void Chat(CPacket msg)
+        {
+			Console.WriteLine($"{msg.pop_string()}");
+
+			string chat = msg.pop_string();
+
+			this.players.ForEach(player =>
+			{
+				msg.push(chat);
+				player.send(msg);
+			});
+		}
 
 		/// <summary>
 		/// 
