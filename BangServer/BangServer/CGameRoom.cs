@@ -239,13 +239,16 @@ namespace BangServer
             msg.push(this.current_turn_player);
             broadcast(msg);
 
-            // 덱 셋팅 DeckSet
-            // 손패 각각에게 보내주기
-            CPacket cards = CPacket.create((short)PROTOCOL.DRAWCARD);
 
             this.players.ForEach(player =>
             {
-                //List<CCard> tempDeck = new List<CCard>();
+                // 덱 셋팅 DeckSet
+                // 손패 각각에게 보내주기
+                CPacket cards = CPacket.create((short)PROTOCOL.CARDFIRSTSET);
+                cards.push((byte)this.players.Count);
+                int count = 4;
+                cards.push(player.player_index);
+                cards.push(count);
 
                 #region
                 // 첫 시작 시에는 4장으로 시작하므로.
@@ -256,13 +259,20 @@ namespace BangServer
                 //    cards.push(deck[j].number);
                 //}
                 #endregion
-                for (int i=0; i < 4; i++)
+                for (int i = 0; i < count; i++)
                 {
                     cards.push(deck[i].name);
                     cards.push(deck[i].shape);
                     cards.push(deck[i].number);
-                    player.send(cards);
+
+                    //Console.WriteLine($"{player.player_index}, {deck[i].name}, {deck[i].shape}, {deck[i].number}");
                 }
+                player.send(cards);
+
+                Console.WriteLine($"{player.player_index}, {deck[0].name}, {deck[0].shape}, {deck[0].number}" + "\n" +
+                    $", {deck[1].name}, {deck[1].shape}, {deck[1].number}" + "\n" +
+                    $", {deck[2].name}, {deck[2].shape}, {deck[2].number}" + "\n" +
+                    $", {deck[3].name}, {deck[3].shape}, {deck[3].number}");
 
                 #region 디버그용
                 //for (int i = 0; i < deck.Count(); i++)
@@ -273,7 +283,7 @@ namespace BangServer
                 #endregion
 
 
-                for (int i=0; i<4; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     deck.RemoveAt(0);
                 }
@@ -285,8 +295,6 @@ namespace BangServer
                 //}
                 //Console.WriteLine($"덱 카운트: {deck.Count}");
                 #endregion
-
-                //tempDeck = deck;
             });
 
             #endregion
@@ -1246,7 +1254,7 @@ namespace BangServer
             List<string> TempCharList = new List<string>();
 
             TempCharList.Add("Willy_The_Kid");
-            TempCharList.Add("Clamity_Janet");
+            TempCharList.Add("Calamity_Janet");
             TempCharList.Add("Kit_Carlson");
             TempCharList.Add("Bart_Cassidy");
             TempCharList.Add("Sid_Ketchum");
