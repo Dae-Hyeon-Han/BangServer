@@ -30,7 +30,7 @@ namespace BangServer
 
         // 게임을 진행하는 플레이어. 1P, 2P가 존재한다.
         List<CPlayer> players;
-        List<CPlayer> livingPlayers;
+        //List<CPlayer> livingPlayers;
 
         // 플레잉 카드
         //List<CCard> deck;
@@ -57,7 +57,7 @@ namespace BangServer
 
         // 드로우 가능한 덱, 소모된 카드 덱
         List<CCard> deck = new List<CCard>();
-        Stack<CCard> deadDeck = new Stack<CCard>();
+        Stack<CCard> usedCardDeck = new Stack<CCard>();
 
         // 현재 턴을 진행하고 있는 플레이어의 인덱스.
         byte current_turn_player;
@@ -66,7 +66,7 @@ namespace BangServer
         public CGameRoom()
         {
             this.players = new List<CPlayer>();
-            this.livingPlayers = players;
+            //this.livingPlayers = players;
             this.player_state = new Dictionary<byte, PLAYER_STATE>();
             this.current_turn_player = 0;
 
@@ -1425,9 +1425,9 @@ namespace BangServer
         }
 
         // 턴 시작될 때 카드 뽑기
-        public CCard DrawCard(CPacket msg)
+        public void DrawCard(CPacket msg)
         {
-            return null;
+
         }
 
         // 덱이 모두 소모되면 사용
@@ -1463,11 +1463,25 @@ namespace BangServer
             //	this.current_turn_player = this.players[0].player_index;
             //}
             #endregion
+            // 0 or 1이 옴. count == 2 // 추후 0,1,2,3,4,5,6 수신 가능. count == 7
+            // 요청한 플레이어가 마지막 인덱스 플레이어라면
+            if (index == players.Count - 1)
+            {
+                index = 0;
+            }
 
+            Console.WriteLine(index + "의 턴");
+
+            // 사망한 플레이어라면 ++ 해줄것.
+            if (players[index].Life == 0)
+            {
+                index++;
+            }
+            #region 구버전2
             while (true)
             {
                 // 맨 끝 인덱스인지 먼저 확인
-                if (index == livingPlayers.Count)
+                if (index == players.Count - 1)
                 {
                     index++;
                 }
@@ -1478,6 +1492,9 @@ namespace BangServer
                     break;
                 }
             }
+            #endregion
+
+            Console.WriteLine(index + "의 턴");
 
             // 턴을 시작한다.
             TurnStart(index);
@@ -1491,7 +1508,7 @@ namespace BangServer
         {
             Console.WriteLine(index + "의 턴 시작");
             // 턴을 진행할 수 있도록 준비 상태로 만든다.
-            this.livingPlayers.ForEach(player => change_playerstate(player, PLAYER_STATE.READY_TO_TURN));
+            this.players.ForEach(player => change_playerstate(player, PLAYER_STATE.READY_TO_TURN));
 
             CPacket msg = CPacket.create((short)PROTOCOL.START_PLAYER_TURN);
             msg.push(this.current_turn_player);
