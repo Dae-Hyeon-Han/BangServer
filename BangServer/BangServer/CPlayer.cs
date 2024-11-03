@@ -16,6 +16,7 @@ namespace BangServer
         public string playerJob { get; set; }                   // 플레이어 직업. 보안관, 무법자 등
         public string charName { get; set; }                    // 플레이어 캐릭터. 근데 public 인데 get,set, 쓰는 의미가 있나?
         private int maxLife;
+        public int cardCount { get; set; }
 
         public int MaxLife
         {

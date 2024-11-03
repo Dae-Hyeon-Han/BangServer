@@ -75,7 +75,7 @@ namespace BangServer
                     {
                         short begin_pos = msg.pop_int16();
                         short target_pos = msg.pop_int16();
-                        this.battle_room.moving_req(this.player, begin_pos, target_pos);
+                        //this.battle_room.moving_req(this.player, begin_pos, target_pos);
                     }
                     break;
                 case PROTOCOL.CHARACTERCHOICE:

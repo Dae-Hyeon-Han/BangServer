@@ -250,6 +250,8 @@ namespace BangServer
                 cards.push(player.player_index);
                 cards.push(count);
 
+                player.cardCount = 4;               // 플레이어 별 손 카드 수 표시
+
                 #region
                 // 첫 시작 시에는 4장으로 시작하므로.
                 //for (int j = deck.Count - 1; j >= deck.Count-5; j--)
@@ -304,15 +306,15 @@ namespace BangServer
         /// <summary>
         /// 턴을 시작하라고 클라이언트들에게 알려 준다.
         /// </summary>
-        void start_turn()
-        {
-            // 턴을 진행할 수 있도록 준비 상태로 만든다.
-            this.players.ForEach(player => change_playerstate(player, PLAYER_STATE.READY_TO_TURN));
+        //void start_turn()
+        //{
+        //    // 턴을 진행할 수 있도록 준비 상태로 만든다.
+        //    this.players.ForEach(player => change_playerstate(player, PLAYER_STATE.READY_TO_TURN));
 
-            CPacket msg = CPacket.create((short)PROTOCOL.START_PLAYER_TURN);
-            msg.push(this.current_turn_player);
-            broadcast(msg);
-        }
+        //    CPacket msg = CPacket.create((short)PROTOCOL.START_PLAYER_TURN);
+        //    msg.push(this.current_turn_player);
+        //    broadcast(msg);
+        //}
 
 
         /// <summary>
@@ -392,19 +394,19 @@ namespace BangServer
         /// <param name="basis_cell"></param>
         /// <param name="attacker"></param>
         /// <param name="victim"></param>
-        public void infect(short basis_cell, CPlayer attacker, CPlayer victim)
-        {
-            // 방어자의 세균중에 기준위치로 부터 1칸 반경에 있는 세균들이 감염 대상이다.
-            List<short> neighbors = CHelper.find_neighbor_cells(basis_cell, victim.viruses, 1);
-            foreach (short position in neighbors)
-            {
-                // 방어자의 세균을 삭제한다.
-                remove_virus(victim.player_index, position);
+        //public void infect(short basis_cell, CPlayer attacker, CPlayer victim)
+        //{
+        //    // 방어자의 세균중에 기준위치로 부터 1칸 반경에 있는 세균들이 감염 대상이다.
+        //    List<short> neighbors = CHelper.find_neighbor_cells(basis_cell, victim.viruses, 1);
+        //    foreach (short position in neighbors)
+        //    {
+        //        // 방어자의 세균을 삭제한다.
+        //        remove_virus(victim.player_index, position);
 
-                // 공격자의 세균을 추가하고,
-                put_virus(attacker.player_index, position);
-            }
-        }
+        //        // 공격자의 세균을 추가하고,
+        //        put_virus(attacker.player_index, position);
+        //    }
+        //}
 
 
         /// <summary>
@@ -433,116 +435,116 @@ namespace BangServer
         /// <param name="sender">요청한 유저</param>
         /// <param name="begin_pos">시작 위치</param>
         /// <param name="target_pos">이동하고자 하는 위치</param>
-        public void moving_req(CPlayer sender, short begin_pos, short target_pos)
-        {
-            // sender차례인지 체크.
-            if (this.current_turn_player != sender.player_index)
-            {
-                // 현재 턴이 아닌 플레이어가 보낸 요청이라면 무시한다.
-                // 이런 비정상적인 상황에서는 화면이나 파일로 로그를 남겨두는것이 좋다.
-                return;
-            }
+        //public void moving_req(CPlayer sender, short begin_pos, short target_pos)
+        //{
+        //    // sender차례인지 체크.
+        //    if (this.current_turn_player != sender.player_index)
+        //    {
+        //        // 현재 턴이 아닌 플레이어가 보낸 요청이라면 무시한다.
+        //        // 이런 비정상적인 상황에서는 화면이나 파일로 로그를 남겨두는것이 좋다.
+        //        return;
+        //    }
 
-            // begin_pos에 sender의 세균이 존재하는지 체크.
-            if (this.gameboard[begin_pos] != sender.player_index)
-            {
-                // 시작 위치에 해당 플레이어의 세균이 존재하지 않는다.
-                return;
-            }
+        //    // begin_pos에 sender의 세균이 존재하는지 체크.
+        //    if (this.gameboard[begin_pos] != sender.player_index)
+        //    {
+        //        // 시작 위치에 해당 플레이어의 세균이 존재하지 않는다.
+        //        return;
+        //    }
 
-            // 목적지는 EMPTY_SLOT으로 설정된 빈 공간이어야 한다.
-            // 다른 세균이 자리하고 있는 곳으로는 이동할 수 없다.
-            if (this.gameboard[target_pos] != EMPTY_SLOT)
-            {
-                // 목적지에 다른 세균이 존재한다.
-                return;
-            }
+        //    // 목적지는 EMPTY_SLOT으로 설정된 빈 공간이어야 한다.
+        //    // 다른 세균이 자리하고 있는 곳으로는 이동할 수 없다.
+        //    if (this.gameboard[target_pos] != EMPTY_SLOT)
+        //    {
+        //        // 목적지에 다른 세균이 존재한다.
+        //        return;
+        //    }
 
-            // target_pos가 이동 또는 복제 가능한 범위인지 체크.
-            short distance = CHelper.get_distance(begin_pos, target_pos);
-            if (distance > 2)
-            {
-                // 2칸을 초과하는 거리는 이동할 수 없다.
-                return;
-            }
+        //    // target_pos가 이동 또는 복제 가능한 범위인지 체크.
+        //    short distance = CHelper.get_distance(begin_pos, target_pos);
+        //    if (distance > 2)
+        //    {
+        //        // 2칸을 초과하는 거리는 이동할 수 없다.
+        //        return;
+        //    }
 
-            if (distance <= 0)
-            {
-                // 자기 자신의 위치로는 이동할 수 없다.
-                return;
-            }
+        //    if (distance <= 0)
+        //    {
+        //        // 자기 자신의 위치로는 이동할 수 없다.
+        //        return;
+        //    }
 
-            // 모든 체크가 정상이라면 이동을 처리한다.
-            if (distance == 1)      // 이동 거리가 한칸일 경우에는 복제를 수행한다.
-            {
-                put_virus(sender.player_index, target_pos);
-            }
-            else if (distance == 2)     // 이동 거리가 두칸일 경우에는 이동을 수행한다.
-            {
-                // 이전 위치에 있는 세균은 삭제한다.
-                remove_virus(sender.player_index, begin_pos);
+        //    // 모든 체크가 정상이라면 이동을 처리한다.
+        //    if (distance == 1)      // 이동 거리가 한칸일 경우에는 복제를 수행한다.
+        //    {
+        //        put_virus(sender.player_index, target_pos);
+        //    }
+        //    else if (distance == 2)     // 이동 거리가 두칸일 경우에는 이동을 수행한다.
+        //    {
+        //        // 이전 위치에 있는 세균은 삭제한다.
+        //        remove_virus(sender.player_index, begin_pos);
 
-                // 새로운 위치에 세균을 놓는다.
-                put_virus(sender.player_index, target_pos);
-            }
+        //        // 새로운 위치에 세균을 놓는다.
+        //        put_virus(sender.player_index, target_pos);
+        //    }
 
-            // 목적지를 기준으로 주위에 존재하는 상대방 세균을 감염시켜 같은 편으로 만든다.
-            CPlayer opponent = get_opponent_player();
-            infect(target_pos, sender, opponent);
+        //    // 목적지를 기준으로 주위에 존재하는 상대방 세균을 감염시켜 같은 편으로 만든다.
+        //    CPlayer opponent = get_opponent_player();
+        //    infect(target_pos, sender, opponent);
 
-            // 최종 결과를 broadcast한다.
-            CPacket msg = CPacket.create((short)PROTOCOL.PLAYER_MOVED);
-            msg.push(sender.player_index);      // 누가
-            msg.push(begin_pos);                // 어디서
-            msg.push(target_pos);               // 어디로 이동 했는지
-            broadcast(msg);
-        }
+        //    // 최종 결과를 broadcast한다.
+        //    CPacket msg = CPacket.create((short)PROTOCOL.PLAYER_MOVED);
+        //    msg.push(sender.player_index);      // 누가
+        //    msg.push(begin_pos);                // 어디서
+        //    msg.push(target_pos);               // 어디로 이동 했는지
+        //    broadcast(msg);
+        //}
 
 
         /// <summary>
         /// 클라이언트에서 턴 연출이 모두 완료 되었을 때 호출된다.
         /// </summary>
         /// <param name="sender"></param>
-        public void turn_finished(CPlayer sender)
-        {
-            change_playerstate(sender, PLAYER_STATE.CLIENT_TURN_FINISHED);
+        //public void turn_finished(CPlayer sender)
+        //{
+        //    change_playerstate(sender, PLAYER_STATE.CLIENT_TURN_FINISHED);
 
-            if (!allplayers_ready(PLAYER_STATE.CLIENT_TURN_FINISHED))
-            {
-                return;
-            }
+        //    if (!allplayers_ready(PLAYER_STATE.CLIENT_TURN_FINISHED))
+        //    {
+        //        return;
+        //    }
 
-            // 턴을 넘긴다.
-            turn_end();
-        }
+        //    // 턴을 넘긴다.
+        //    turn_end();
+        //}
 
 
         /// <summary>
         /// 턴을 종료한다. 게임이 끝났는지 확인하는 과정을 수행한다.
         /// </summary>
-        void turn_end()
-        {
-            // 보드판 상태를 확인하여 게임이 끝났는지 검사한다.
-            if (!CHelper.can_play_more(this.table_board, get_opponent_player(), this.players))
-            {
-                game_over();
-                return;
-            }
+        //void turn_end()
+        //{
+        //    // 보드판 상태를 확인하여 게임이 끝났는지 검사한다.
+        //    if (!CHelper.can_play_more(this.table_board, get_opponent_player(), this.players))
+        //    {
+        //        game_over();
+        //        return;
+        //    }
 
-            // 아직 게임이 끝나지 않았다면 다음 플레이어로 턴을 넘긴다.
-            if (this.current_turn_player < this.players.Count - 1)
-            {
-                ++this.current_turn_player;
-            }
-            else
-            {
-                // 다시 첫번째 플레이어의 턴으로 만들어 준다.
-                this.current_turn_player = this.players[0].player_index;
-            }
+        //    // 아직 게임이 끝나지 않았다면 다음 플레이어로 턴을 넘긴다.
+        //    if (this.current_turn_player < this.players.Count - 1)
+        //    {
+        //        ++this.current_turn_player;
+        //    }
+        //    else
+        //    {
+        //        // 다시 첫번째 플레이어의 턴으로 만들어 준다.
+        //        this.current_turn_player = this.players[0].player_index;
+        //    }
 
-            // 턴을 시작한다.
-            start_turn();
-        }
+        //    // 턴을 시작한다.
+        //    start_turn();
+        //}
 
         // 승패를 가리는 부분
         void game_over()
@@ -1425,9 +1427,26 @@ namespace BangServer
         }
 
         // 턴 시작될 때 카드 뽑기
-        public void DrawCard(CPacket msg)
+        // 일단 디폴트로 작성. 웰스 파고 및 역마차는 별도로 작성
+        public void DrawCard(byte index)
         {
+            CPacket msg = CPacket.create((short)PROTOCOL.DRAWCARD);
+            
 
+            // 
+            int count = 2;
+
+
+
+            msg.push(index);                    // 인덱스 번호
+            msg.push(count);                    // 드로우 할 카드 수
+            
+            for(int i=0; i<count; i++)
+            {
+                msg.push(deck[i].name);         // 카드 이름
+                msg.push(deck[i].shape);        // 카드 모양
+                msg.push(deck[i].number);       // 카드 숫자
+            }
         }
 
         // 덱이 모두 소모되면 사용
@@ -1442,40 +1461,41 @@ namespace BangServer
         /// <param name="index"> 턴 종료 버튼을 누른 플레이어의 인덱스 번호 </param>
         public void TurnEnd(byte index)
         {
-            Console.WriteLine(index + "의 턴 종료");
+            Console.WriteLine((int)index + "의 턴 종료");
 
             #region 구버전
             //// 보드판 상태를 확인하여 게임이 끝났는지 검사한다.
             //if (!CHelper.can_play_more(this.table_board, get_opponent_player(), this.players))
             //{
-            //	game_over();
-            //	return;
+            //    game_over();
+            //    return;
             //}
 
             //// 아직 게임이 끝나지 않았다면 다음 플레이어로 턴을 넘긴다.
             //if (this.current_turn_player < this.players.Count - 1)
             //{
-            //	++this.current_turn_player;
+            //    ++this.current_turn_player;
             //}
             //else
             //{
-            //	// 다시 첫번째 플레이어의 턴으로 만들어 준다.
-            //	this.current_turn_player = this.players[0].player_index;
+            //    // 다시 첫번째 플레이어의 턴으로 만들어 준다.
+            //    this.current_turn_player = this.players[0].player_index;
             //}
             #endregion
             // 0 or 1이 옴. count == 2 // 추후 0,1,2,3,4,5,6 수신 가능. count == 7
             // 요청한 플레이어가 마지막 인덱스 플레이어라면
             if (index == players.Count - 1)
             {
-                index = 0;
+                //index = 0;
+                this.current_turn_player = this.players[0].player_index;
             }
 
-            Console.WriteLine(index + "의 턴");
+            Console.WriteLine((int)this.current_turn_player + "의 턴");
 
             // 사망한 플레이어라면 ++ 해줄것.
-            if (players[index].Life == 0)
+            if (players[this.current_turn_player].Life == 0)
             {
-                index++;
+                ++this.current_turn_player;
             }
             #region 구버전2
             while (true)
@@ -1494,10 +1514,10 @@ namespace BangServer
             }
             #endregion
 
-            Console.WriteLine(index + "의 턴");
+            Console.WriteLine((int)this.current_turn_player + "의 턴");
 
             // 턴을 시작한다.
-            TurnStart(index);
+            TurnStart(this.current_turn_player);
         }
 
         /// <summary>
@@ -1513,6 +1533,8 @@ namespace BangServer
             CPacket msg = CPacket.create((short)PROTOCOL.START_PLAYER_TURN);
             msg.push(this.current_turn_player);
             broadcast(msg);
+
+            //DrawCard(index);
         }
         #endregion
     }
