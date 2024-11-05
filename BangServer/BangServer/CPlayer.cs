@@ -21,7 +21,11 @@ namespace BangServer
         public int MaxLife
         {
             get { return maxLife; }
-            set { maxLife = value; }
+            set 
+            { 
+                maxLife = value;
+                life = MaxLife;
+            }
         }
         
         private int life;

@@ -1455,12 +1455,19 @@ namespace BangServer
 
         }
 
+        // 모든 플레이어의 잔여 라이프, 손패 수, 아이템 장착 현황 등을 담아 셋팅하는 메서드
+        public void infoBroadCast()
+        {
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="index"> 턴 종료 버튼을 누른 플레이어의 인덱스 번호 </param>
         public void TurnEnd(byte index)
         {
+            Console.WriteLine("-------------------------");
             Console.WriteLine((int)index + "의 턴 종료");
 
             #region 구버전
@@ -1482,39 +1489,58 @@ namespace BangServer
             //    this.current_turn_player = this.players[0].player_index;
             //}
             #endregion
+            #region 구버전2
+            //// 0 or 1이 옴. count == 2 // 추후 0,1,2,3,4,5,6 수신 가능. count == 7
+            //// 요청한 플레이어가 마지막 인덱스 플레이어라면
+            //if (index == players.Count - 1)
+            //{
+            //    //index = 0;
+            //    this.current_turn_player = this.players[0].player_index;
+            //}
+
+            //Console.WriteLine((int)this.current_turn_player + "의 턴 마감");
+
+            //// 사망한 플레이어라면 ++ 해줄것.
+            //if (players[this.current_turn_player].Life == 0)
+            //{
+            //    ++this.current_turn_player;
+            //}
+
+            //Console.WriteLine((int)this.current_turn_player + "의 턴 시작");
+            #endregion
+
             // 0 or 1이 옴. count == 2 // 추후 0,1,2,3,4,5,6 수신 가능. count == 7
             // 요청한 플레이어가 마지막 인덱스 플레이어라면
-            if (index == players.Count - 1)
+            if (index == (players.Count - 1))
             {
                 //index = 0;
                 this.current_turn_player = this.players[0].player_index;
             }
-
-            Console.WriteLine((int)this.current_turn_player + "의 턴");
-
-            // 사망한 플레이어라면 ++ 해줄것.
-            if (players[this.current_turn_player].Life == 0)
+            // 마지막 인덱스가 아니라면 그냥 ++
+            else
             {
                 ++this.current_turn_player;
             }
-            #region 구버전2
-            while (true)
+
+            Console.WriteLine((int)this.current_turn_player + "의 턴 체크");
+
+            while(true)
             {
-                // 맨 끝 인덱스인지 먼저 확인
-                if (index == players.Count - 1)
+                Console.WriteLine($"현재 플레이어{this.current_turn_player}");
+                Console.WriteLine($"현재 플레이어{players[this.current_turn_player].Life}");
+
+                // 사망한 플레이어라면 ++ 해줄것.
+                if (players[this.current_turn_player].Life == 0)
                 {
-                    index++;
+                    ++this.current_turn_player;
                 }
-                // 살아있는 플레이어 중 맨 끝 인덱스가 아니라면.
                 else
                 {
-                    index++;
                     break;
                 }
             }
-            #endregion
 
-            Console.WriteLine((int)this.current_turn_player + "의 턴");
+            Console.WriteLine((int)this.current_turn_player + "의 턴 시작");
 
             // 턴을 시작한다.
             TurnStart(this.current_turn_player);
