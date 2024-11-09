@@ -85,9 +85,53 @@ namespace BangServer
                     break;
                 case PROTOCOL.USECARD:
                     {
-                        // 플레이어가 카드 소비, 장착할 경우 프로토콜
-                        // 사용 카드는 string 형태로 구분할 것
-                        //battle_room.UseBang
+                        // 첫번째 pop_string 값은 무조건 사용한 카드 이름일 것
+                        string cardName = msg.pop_string();
+
+                        // 뱅
+                        if(cardName == "BANG") {}
+                        // 빗나감
+                        else if (cardName == "MANCATO") {}
+                        // 맥주
+                        else if (cardName == "BIRRA") { }
+                        // 기관총
+                        else if (cardName == "GATLING") { }
+                        // 결투
+                        else if (cardName == "DUELLO") { }
+                        // 인디언
+                        else if (cardName == "INDIANI") { }
+                        // 주점
+                        else if (cardName == "SALOON") { }
+                        // 강탈
+                        else if (cardName == "PANICO") { }
+                        // 캣 벌로우
+                        else if (cardName == "CAT BALOU") { }
+                        // 잡화점
+                        else if (cardName == "EMPORIO") { }
+                        // 역마차
+                        else if (cardName == "DILIGENZA") { }
+                        // 웰스파고 은행
+                        else if (cardName == "WELLS FARGO") { }
+                        // 스코필드
+                        else if (cardName == "SCHOFIELD") { }
+                        // 레밍턴
+                        else if (cardName == "REMINGTON") { }
+                        // 카빈
+                        else if (cardName == "CARABINE") { }
+                        // 윈체스터
+                        else if (cardName == "WINCHESTER") { }
+                        // 볼캐닉
+                        else if (cardName == "VOLCANIC") { }
+                        // 조준경
+                        else if (cardName == "MIRONO") { }
+                        // 야생마
+                        else if (cardName == "MUSTANG") { }
+                        // 술통
+                        else if (cardName == "BARILE") { }
+                        // 감옥
+                        else if (cardName == "PRIGIONE") { }
+                        // 다이너마이트
+                        else if (cardName == "DINAMITE") { }
                     }
                     break;
                 case PROTOCOL.CHAT:

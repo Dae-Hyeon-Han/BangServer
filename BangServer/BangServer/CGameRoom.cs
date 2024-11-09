@@ -1331,9 +1331,16 @@ namespace BangServer
         }
 
         // 유저 목록 및 배치 초기화
-        public void UserReset()
+        public void AllUserInfoReset(byte tagetIndex, int life)
         {
+            CPacket msg = CPacket.create((short)PROTOCOL.ALLPLAYERINFOSET);
 
+            // 플레이어들이 선택한 캐릭터 전송
+            this.players.ForEach(player =>
+            {
+                msg.push(player.player_index);
+                msg.push(player.Life);
+            });
         }
 
         /// <summary>

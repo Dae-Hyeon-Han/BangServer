@@ -57,6 +57,9 @@ namespace BangServer
         // 카드 뽑기
         DRAWCARD = 15,
 
+        // 모든 플레이어 정보 셋팅
+        ALLPLAYERINFOSET = 16,
+
         //// 인디언 사용
         //INDIANS_REQ = 15,
 
