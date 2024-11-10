@@ -1331,7 +1331,7 @@ namespace BangServer
         }
 
         // 유저 목록 및 배치 초기화
-        public void AllUserInfoReset(byte tagetIndex, int life)
+        public void AllUserInfoReset()
         {
             CPacket msg = CPacket.create((short)PROTOCOL.ALLPLAYERINFOSET);
 
@@ -1341,6 +1341,7 @@ namespace BangServer
                 msg.push(player.player_index);
                 msg.push(player.Life);
             });
+            broadcast(msg);
         }
 
         /// <summary>
@@ -1351,23 +1352,63 @@ namespace BangServer
         {
             // 플레이어 구분 어케함?
             CPacket msg = CPacket.create((short)PROTOCOL.USECARD);
-            msg.push("BANG");
+            //msg.push("BANG");
             //msg.push(target_index);
             // 
         }
 
         // BANG의 대상이 된 플레이어가 빗나감을 사용할 경우 호출
-        public void UseMissed()
+        public void UseMancato()
         {
 
         }
 
-        // 모든 플레이어에게 적용되는 카드 사용시
-        // 캣 벌로우, 인디언, 기관총, 잡화점, 주점 등
-        public void UseBroadCastCard()
+        // 맥주 사용
+        public void UseVirra()
         {
 
         }
+
+        // 기관총
+        public void UseGatling()
+        {
+
+        }
+
+        // 결투
+        public void UseDuello()
+        {
+
+        }
+
+        // 인디언
+        // 주점
+        public void UseSaloon()
+        {
+            CPacket msg = CPacket.create((short)PROTOCOL.USECARD);
+
+            this.players.ForEach(player => 
+            {
+                player.Life++;
+            });
+
+            AllUserInfoReset();
+        }
+        // 강탈
+        // 캣 벌로우
+        // 잡화점
+        // 역마차
+        // 웰스파고 은행
+        // 아이템 장착(총기류: 스코필드, 레밍턴, 카빈, 윈체스터, 볼캐닉)
+        // 아이템 장착(조준경, 역마차, 술통)
+        // 아이템 장착(다이너마이트, 감옥)
+
+        //// 모든 플레이어에게 적용되는 카드 사용시
+        //// 캣 벌로우, 인디언, 기관총, 잡화점, 주점 등
+        //public void UseBroadCastCard()
+        //{
+
+        //}
 
         // 웰스파고(count = 3), 역마차(count = 2) 사용시
         public void UseGetCards(int count)
