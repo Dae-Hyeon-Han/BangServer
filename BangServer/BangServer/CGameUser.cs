@@ -87,6 +87,7 @@ namespace BangServer
                     {
                         // 첫번째 pop_string 값은 무조건 사용한 카드 이름일 것
                         string cardName = msg.pop_string();
+                        //byte targetIndex = msg.pop_byte();
 
                         // 뱅
                         if(cardName == "BANG") {}
@@ -112,26 +113,23 @@ namespace BangServer
                         else if (cardName == "DILIGENZA") { }
                         // 웰스파고 은행
                         else if (cardName == "WELLS FARGO") { }
-                        // 스코필드
-                        else if (cardName == "SCHOFIELD") { }
-                        // 레밍턴
-                        else if (cardName == "REMINGTON") { }
-                        // 카빈
-                        else if (cardName == "CARABINE") { }
-                        // 윈체스터
-                        else if (cardName == "WINCHESTER") { }
-                        // 볼캐닉
-                        else if (cardName == "VOLCANIC") { }
-                        // 조준경
-                        else if (cardName == "MIRONO") { }
-                        // 야생마
-                        else if (cardName == "MUSTANG") { }
-                        // 술통
-                        else if (cardName == "BARILE") { }
+                        // 스코필드, 레밍턴, 카빈, 윈체스터, 볼캐닉, 조준경, 야생마, 술통
+                        else if (cardName == "SCHOFIELD" || cardName == "REMINGTON" || 
+                                 cardName == "CARABINE" || cardName == "WINCHESTER" || 
+                                 cardName == "VOLCANIC" || cardName == "MIRONO" || 
+                                 cardName == "MUSTANG" || cardName == "BARILE")
+                        {
+                            EquipGun(msg.pop_byte(), cardName);
+                        }
                         // 감옥
                         else if (cardName == "PRIGIONE") { }
                         // 다이너마이트
                         else if (cardName == "DINAMITE") { }
+                    }
+                    break;
+                case PROTOCOL.USEEQUIP:
+                    {
+
                     }
                     break;
                 case PROTOCOL.CHAT:
@@ -148,6 +146,44 @@ namespace BangServer
                     break;
             }
         }
+
+        #region 카드 사용시 메서드
+        public void EquipGun(byte index, string EquipName)
+        {
+            //foreach(byte player in this.ba)
+            // 서버의 플레이어에 장착
+            switch(EquipName)
+            {
+                case "SCHOFIELD":
+                    { 
+                        //player.eq
+                    }
+                    break;
+                case "REMINGTON":
+                    { }
+                    break;
+                case "CARABINE":
+                    { }
+                    break;
+                case "WINCHESTER":
+                    { }
+                    break;
+                case "VOLCANIC":
+                    { }
+                    break;
+                case "MIRONO":          // 조준경
+                    { }
+                    break;
+                case "MUSTANG":          // 야생마
+                    { }
+                    break;
+                case "BARILE":          // 술통
+                    { }
+                    break;
+            }
+            // 정보 전달
+        }
+        #endregion
 
         public void enter_room(CPlayer player, CGameRoom room)
         {

@@ -16,7 +16,17 @@ namespace BangServer
         public string playerJob { get; set; }                   // 플레이어 직업. 보안관, 무법자 등
         public string charName { get; set; }                    // 플레이어 캐릭터. 근데 public 인데 get,set, 쓰는 의미가 있나?
         private int maxLife;
-        public int cardCount { get; set; }
+        public int cardCount { get; set; }              // 손 패수
+
+        // 거리 측정용
+        public int range { get; set; }                  // 플레이어가 볼 때
+        public int depth { get; set; }                  // 플레이어를 볼 때
+        // 장비
+        private string gun;
+        private bool mirono;
+        private bool mustang;
+        private bool barile;
+
 
         public int MaxLife
         {
@@ -47,6 +57,62 @@ namespace BangServer
                 }
             }
         }
+        public string Gun
+        {
+            get { return gun; }
+            set 
+            {
+                gun = value;
+
+                if (gun == "COLT")
+                    range = 1;
+                else if (gun == "SCHOFIELD")
+                    range = 2;
+                else if (gun == "REMINGTON")
+                    range = 3;
+                else if (gun == "CARABINE")
+                    range = 4;
+                else if (gun == "WINCHESTER")
+                    range = 5;
+                else if (gun == "VOLCANIC")
+                    range = 1;
+            }
+        }
+
+        public bool Mirono
+        {
+            get { return mirono; }
+            set
+            {
+                mirono = value;
+
+                if (mirono == true)
+                    range++;
+                else
+                    range--;
+            }
+        }
+
+        public bool Mustang
+        {
+            get { return mustang; }
+            set
+            {
+                mustang = value;
+
+                if (mustang == true)
+                    depth++;
+                else
+                    depth--;
+            }
+        }
+
+        public bool Barile
+        {
+            get { return barile; }
+            set{ barile = value; }
+        }
+
         public List<short> viruses { get; private set; }
 
         public CPlayer(CGameUser user, byte player_index)

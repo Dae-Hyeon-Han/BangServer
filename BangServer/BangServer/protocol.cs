@@ -60,6 +60,12 @@ namespace BangServer
         // 모든 플레이어 정보 셋팅
         ALLPLAYERINFOSET = 16,
 
+        // 플레이어 대응이 필요한 경우
+        REACTION = 17,
+
+        // 아이템 장착
+        USEEQUIP = 18,
+
         //// 인디언 사용
         //INDIANS_REQ = 15,
 
