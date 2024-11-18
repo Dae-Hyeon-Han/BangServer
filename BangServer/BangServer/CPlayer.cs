@@ -23,9 +23,9 @@ namespace BangServer
         public int depth { get; set; }                  // 플레이어를 볼 때
         // 장비
         private string gun;
-        private bool mirono;
-        private bool mustang;
-        private bool barile;
+        private string mirono;
+        private string mustang;
+        private string barile;
 
 
         public int MaxLife
@@ -64,8 +64,11 @@ namespace BangServer
             {
                 gun = value;
 
-                if (gun == "COLT")
+                // 조준경 옵션 추가할 것
+                if (gun == "COLT" && charName != "Rose_Doolan")
                     range = 1;
+                else if (gun == "COLT" && charName == "Rose_Doolan")
+                    range = 2;
                 else if (gun == "SCHOFIELD")
                     range = 2;
                 else if (gun == "REMINGTON")
@@ -74,40 +77,42 @@ namespace BangServer
                     range = 4;
                 else if (gun == "WINCHESTER")
                     range = 5;
-                else if (gun == "VOLCANIC")
+                else if (gun == "VOLCANIC" && charName != "Rose_Doolan")
                     range = 1;
+                else if (gun == "VOLCANIC" && charName == "Rose_Doolan")
+                    range = 2;
             }
         }
 
-        public bool Mirono
+        public string Mirono
         {
             get { return mirono; }
             set
             {
                 mirono = value;
 
-                if (mirono == true)
+                if (mirono == "true")           // true면 장착 중, 아니면 장착 해제
                     range++;
                 else
                     range--;
             }
         }
 
-        public bool Mustang
+        public string Mustang
         {
             get { return mustang; }
             set
             {
                 mustang = value;
 
-                if (mustang == true)
+                if (mustang == "true")
                     depth++;
                 else
                     depth--;
             }
         }
 
-        public bool Barile
+        public string Barile
         {
             get { return barile; }
             set{ barile = value; }

@@ -212,11 +212,22 @@ namespace BangServer
                 players[i].playerJob = job[i];
                 players[i].MaxLife = 4;                     // 추후 변경 예정(보안관+1, 폴 리그리트와 엘 그링고는 -1)
 
-                if (Characters[i] == "Paul_Regret" || Characters[i] == "El_Gringo")
+                // 캐릭터 및 직업 별 셋팅
+                if (Characters[i] == "El_Gringo")
                     players[i].MaxLife--;
+                else if (Characters[i] == "Rose_Doolan")
+                    players[i].range++;
+                else if (Characters[i] == "Paul_Regret")
+                {
+                    players[i].MaxLife--;
+                    players[i].depth++;
+                }
 
                 if (job[i] == "SCERIFFO")
                     players[i].MaxLife++;
+
+
+                players[i].Gun = "COLT";
             }
 
 
@@ -228,6 +239,8 @@ namespace BangServer
                 msg.push(player.charName);
                 msg.push(player.playerJob);         // 캐릭터의 생명력 push 해줄 것
                 msg.push(player.MaxLife);			// 캐릭터의 직업 push 해줄 것
+                msg.push(player.range);
+                msg.push(player.depth);
                 //Console.WriteLine("인덱스: " + player.player_index);
             });
             // 동기화는...?
@@ -1333,6 +1346,7 @@ namespace BangServer
         // 유저 목록 및 배치 초기화
         public void AllUserInfoReset()
         {
+            //[프로토콜][인덱스][남은 생명력][손패 숫자][사정거리][거리감(depth)][총][조준경][야생마][술통]
             CPacket msg = CPacket.create((short)PROTOCOL.ALLPLAYERINFOSET);
 
             // 플레이어들이 선택한 캐릭터 전송
@@ -1340,10 +1354,18 @@ namespace BangServer
             {
                 msg.push(player.player_index);
                 msg.push(player.Life);
+                msg.push(player.cardCount);
+                msg.push(player.range);
+                msg.push(player.depth);
+                msg.push(player.Gun);
+                msg.push(player.Mirono);                // true면 장착, 아니면 장착하지 않음(false 아님)
+                msg.push(player.Mustang);               // true면 장착, 아니면 장착하지 않음(false 아님)
+                msg.push(player.Barile);                // true면 장착, 아니면 장착하지 않음(false 아님)
             });
             broadcast(msg);
         }
 
+        #region 카드 사용시 동작하는 메서드
         /// <summary>
         /// 어떤 플레이어가 BANG 사용했을 경우, 자신의 턴에.
         /// </summary>
@@ -1387,7 +1409,7 @@ namespace BangServer
         {
             CPacket msg = CPacket.create((short)PROTOCOL.USECARD);
 
-            this.players.ForEach(player => 
+            this.players.ForEach(player =>
             {
                 player.Life++;
             });
@@ -1427,6 +1449,40 @@ namespace BangServer
         {
 
         }
+
+        #region 장비 사용시 메서드
+        public void EquipGun(byte index, string EquipName)
+        {
+            //foreach(byte player in this.ba)
+            this.players.ForEach(player =>
+            {
+                if (player.player_index == index)
+                {
+                    // 장비 장착
+                    if (EquipName == "MIRONO")
+                    {
+                        player.Mirono = "true";
+                    }
+                    else if (EquipName == "MUSTANG")
+                    {
+                        player.Mustang = "true";
+                    }
+                    else if (EquipName == "BARILE")
+                    {
+                        player.Barile = "true";
+                    }
+                    else
+                    {
+                        player.Gun = EquipName;
+                    }
+                }
+            });
+
+            // 정보 전달
+            AllUserInfoReset();
+        }
+        #endregion
+        #endregion
 
         #region 브로드캐스트 사용되는 메서드 예시
         //      // 인디언 사용한 경우
@@ -1479,7 +1535,7 @@ namespace BangServer
         public void DrawCard(byte index)
         {
             CPacket msg = CPacket.create((short)PROTOCOL.DRAWCARD);
-            
+
 
             // 
             int count = 2;
@@ -1488,8 +1544,8 @@ namespace BangServer
 
             msg.push(index);                    // 인덱스 번호
             msg.push(count);                    // 드로우 할 카드 수
-            
-            for(int i=0; i<count; i++)
+
+            for (int i = 0; i < count; i++)
             {
                 msg.push(deck[i].name);         // 카드 이름
                 msg.push(deck[i].shape);        // 카드 모양
@@ -1572,7 +1628,7 @@ namespace BangServer
 
             Console.WriteLine((int)this.current_turn_player + "의 턴 체크");
 
-            while(true)
+            while (true)
             {
                 Console.WriteLine($"현재 플레이어{this.current_turn_player}");
                 Console.WriteLine($"현재 플레이어{players[this.current_turn_player].Life}");

@@ -119,7 +119,7 @@ namespace BangServer
                                  cardName == "VOLCANIC" || cardName == "MIRONO" || 
                                  cardName == "MUSTANG" || cardName == "BARILE")
                         {
-                            EquipGun(msg.pop_byte(), cardName);
+                            battle_room.EquipGun(msg.pop_byte(), cardName);
                         }
                         // 감옥
                         else if (cardName == "PRIGIONE") { }
@@ -147,43 +147,7 @@ namespace BangServer
             }
         }
 
-        #region 카드 사용시 메서드
-        public void EquipGun(byte index, string EquipName)
-        {
-            //foreach(byte player in this.ba)
-            // 서버의 플레이어에 장착
-            switch(EquipName)
-            {
-                case "SCHOFIELD":
-                    { 
-                        //player.eq
-                    }
-                    break;
-                case "REMINGTON":
-                    { }
-                    break;
-                case "CARABINE":
-                    { }
-                    break;
-                case "WINCHESTER":
-                    { }
-                    break;
-                case "VOLCANIC":
-                    { }
-                    break;
-                case "MIRONO":          // 조준경
-                    { }
-                    break;
-                case "MUSTANG":          // 야생마
-                    { }
-                    break;
-                case "BARILE":          // 술통
-                    { }
-                    break;
-            }
-            // 정보 전달
-        }
-        #endregion
+        
 
         public void enter_room(CPlayer player, CGameRoom room)
         {
