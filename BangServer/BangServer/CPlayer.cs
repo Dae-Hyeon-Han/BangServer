@@ -20,6 +20,7 @@ namespace BangServer
 
         // 거리 측정용
         public int range { get; set; }                  // 플레이어가 볼 때
+        private int defaultRange;                      // 기본 사거리
         public int depth { get; set; }                  // 플레이어를 볼 때
         // 장비
         private string gun;
@@ -57,6 +58,19 @@ namespace BangServer
                 }
             }
         }
+
+        // 게임 초기에 한번 셋팅 된 후 고정
+        public int DefaultRange
+        {
+            get { return defaultRange; }
+            set
+            {
+                defaultRange = value;
+
+                range = defaultRange;
+            }
+        }
+
         public string Gun
         {
             get { return gun; }
@@ -65,22 +79,18 @@ namespace BangServer
                 gun = value;
 
                 // 조준경 옵션 추가할 것
-                if (gun == "COLT" && charName != "Rose_Doolan")
-                    range = 1;
-                else if (gun == "COLT" && charName == "Rose_Doolan")
-                    range = 2;
+                if (gun == "COLT")
+                    range = defaultRange;
                 else if (gun == "SCHOFIELD")
-                    range = 2;
+                    range = defaultRange+1;
                 else if (gun == "REMINGTON")
-                    range = 3;
+                    range = defaultRange+2;
                 else if (gun == "CARABINE")
-                    range = 4;
+                    range = defaultRange+3;
                 else if (gun == "WINCHESTER")
-                    range = 5;
-                else if (gun == "VOLCANIC" && charName != "Rose_Doolan")
-                    range = 1;
-                else if (gun == "VOLCANIC" && charName == "Rose_Doolan")
-                    range = 2;
+                    range = defaultRange+4;
+                else if (gun == "VOLCANIC")
+                    range = defaultRange;
             }
         }
 

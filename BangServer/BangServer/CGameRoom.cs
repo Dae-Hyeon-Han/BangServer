@@ -215,8 +215,6 @@ namespace BangServer
                 // 캐릭터 및 직업 별 셋팅
                 if (Characters[i] == "El_Gringo")
                     players[i].MaxLife--;
-                else if (Characters[i] == "Rose_Doolan")
-                    players[i].range++;
                 else if (Characters[i] == "Paul_Regret")
                 {
                     players[i].MaxLife--;
@@ -226,6 +224,11 @@ namespace BangServer
                 if (job[i] == "SCERIFFO")
                     players[i].MaxLife++;
 
+
+                if (Characters[i] == "Rose_Doolan")
+                    players[i].DefaultRange = 2;
+                else
+                    players[i].DefaultRange = 1;
 
                 players[i].Gun = "COLT";
             }
@@ -284,10 +287,10 @@ namespace BangServer
                 }
                 player.send(cards);
 
-                Console.WriteLine($"{player.player_index}, {deck[0].name}, {deck[0].shape}, {deck[0].number}" + "\n" +
-                    $", {deck[1].name}, {deck[1].shape}, {deck[1].number}" + "\n" +
-                    $", {deck[2].name}, {deck[2].shape}, {deck[2].number}" + "\n" +
-                    $", {deck[3].name}, {deck[3].shape}, {deck[3].number}");
+                //Console.WriteLine($"{player.player_index}, {deck[0].name}, {deck[0].shape}, {deck[0].number}" + "\n" +
+                //    $", {deck[1].name}, {deck[1].shape}, {deck[1].number}" + "\n" +
+                //    $", {deck[2].name}, {deck[2].shape}, {deck[2].number}" + "\n" +
+                //    $", {deck[3].name}, {deck[3].shape}, {deck[3].number}");
 
                 #region 디버그용
                 //for (int i = 0; i < deck.Count(); i++)
@@ -608,108 +611,6 @@ namespace BangServer
         // 게임 시작시 덱 초기화
         public void DeckSet()
         {
-            #region 진짜 구버전
-            //         // 카드 생성. 숫자와 무늬는 랜덤 생성
-            //         for (int i=0; i<80; i++)
-            //         {
-            //	CCard card = new CCard();
-
-            //	#region 덱 셋팅(구버전)
-            //	//if(i<25)
-            //	//            {
-            //	//	card.name = "Bang!";		// 뱅 * 25
-
-            //	//            }
-            //	//else if(i<37)
-            //	//            {
-            //	//	card.name = "Missed!";		// 빗나감 * 12
-            //	//            }
-            //	//else if(i<43)
-            //	//            {
-            //	//	card.name = "Beer!";		// 맥주 * 6
-            //	//            }
-            //	//else if(i<44)
-            //	//            {
-            //	//	card.name = "Gatling!";		// 기관총 * 1
-            //	//            }
-            //	//else if(i<47)
-            //	//            {
-            //	//	card.name = "Duel!";		// 결투 * 3
-            //	//            }
-            //	//else if(i<49)
-            //	//            {
-            //	//	card.name = "Indian!";		// 인디언 * 2
-            //	//            }
-            //	//else if(i<50)
-            //	//            {
-            //	//	card.name = "Saloon!";		// 주점 * 1
-            //	//            }
-            //	//else if (i < 54)
-            //	//{
-            //	//	card.name = "Panic!";		// 강탈 * 4
-            //	//}
-            //	//else if (i < 58)
-            //	//{
-            //	//	card.name = "Cat Balou!";	// 캣벌로우 * 4
-            //	//}
-            //	//else if (i < 60)
-            //	//{
-            //	//	card.name = "General Store";	// 잡화점 * 2
-            //	//}
-            //	//else if (i < 62)
-            //	//{
-            //	//	card.name = "Stagecoach";		// 역마차 * 2
-            //	//}
-            //	//else if (i < 63)
-            //	//{
-            //	//	card.name = "Wells Fargo";       // 웰스파고 은행 * 1
-            //	//}
-            //	//else if (i < 66)
-            //	//{
-            //	//	card.name = "Schofield";       // 스코필드(총) * 3
-            //	//}
-            //	//else if (i < 67)
-            //	//{
-            //	//	card.name = "Remington";       // 레밍턴(총) * 1
-            //	//}
-            //	//else if (i < 68)
-            //	//{
-            //	//	card.name = "Carabine";			// 카빈(총) * 1
-            //	//}
-            //	//else if (i < 69)
-            //	//{
-            //	//	card.name = "Winchester";       // 윈체스터(총) * 1
-            //	//}
-            //	//else if (i < 71)
-            //	//{
-            //	//	card.name = "Volcanic";			// 볼캐닉(총) * 2
-            //	//}
-            //	//else if (i < 72)
-            //	//{
-            //	//	card.name = "Scope";			 // 조준경 * 1
-            //	//}
-            //	//else if (i < 74)
-            //	//{
-            //	//	card.name = "Mustang";			// 야생마 * 2
-            //	//}
-            //	//else if (i < 76)
-            //	//{
-            //	//	card.name = "Barrel";			 // 술통 * 2
-            //	//}
-            //	//else if (i < 79)
-            //	//{
-            //	//	card.name = "Jail";				// 감옥 * 3
-            //	//}
-            //	//else if (i < 80)
-            //	//{
-            //	//	card.name = "Dynamite";       // 다이너마이트 * 1
-            //	//}
-            //	#endregion
-
-            //	//deck.Add()
-            //}
-            #endregion
-
             #region 카드 객체 생성 0 ~79
             CCard card0 = new CCard();
             CCard card1 = new CCard();
@@ -1369,14 +1270,15 @@ namespace BangServer
         /// <summary>
         /// 어떤 플레이어가 BANG 사용했을 경우, 자신의 턴에.
         /// </summary>
-        /// <param name="target_index">공격 대상 플레이어</param>
-        public void UseBang(byte target_index)
+        /// <param name="targetIndex">공격 대상 플레이어</param>
+        public void UseBang(byte targetIndex)
         {
-            // 플레이어 구분 어케함?
-            CPacket msg = CPacket.create((short)PROTOCOL.USECARD);
-            //msg.push("BANG");
-            //msg.push(target_index);
-            // 
+            this.players.ForEach(player =>
+            {
+                CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                msg.push("MINCATO");
+                player.send(msg);
+            });
         }
 
         // BANG의 대상이 된 플레이어가 빗나감을 사용할 경우 호출
@@ -1385,30 +1287,54 @@ namespace BangServer
 
         }
 
-        // 맥주 사용
-        public void UseVirra()
-        {
-
-        }
-
         // 기관총
         public void UseGatling()
         {
+            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
 
+            this.players.ForEach(player =>
+            {
+                // 기관총을 낸 유저 제외
+                if (player.player_index != current_turn_player)
+                {
+                    msg.push("MINCATO");
+                    player.send(msg);
+                }
+            });
         }
 
-        // 결투
-        public void UseDuello()
-        {
 
+        // 결투
+        public void UseDuello(byte targetIndex)
+        {
+            this.players.ForEach(player =>
+            {
+                if (player.player_index == targetIndex)
+                {
+                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                    msg.push("BANG");
+                    player.send(msg);
+                }
+            });
         }
 
         // 인디언
+        public void UseIndiani()
+        {
+
+            this.players.ForEach(player =>
+            {
+                if (player.player_index != current_turn_player)
+                {
+                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                    msg.push("BANG");
+                    player.send(msg);
+                }
+            });
+        }
         // 주점
         public void UseSaloon()
         {
-            CPacket msg = CPacket.create((short)PROTOCOL.USECARD);
-
             this.players.ForEach(player =>
             {
                 player.Life++;
@@ -1418,30 +1344,64 @@ namespace BangServer
         }
         // 강탈
         // 캣 벌로우
+
         // 잡화점
+        public void UseEmporio()
+        {
+            Console.WriteLine("잡화점");
+
+            this.players.ForEach(player =>
+            {
+                // 어떻게 순서대로 주지?
+                CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+
+                if(player.Life != 0)
+                {
+                    // 일단 랜덤 처리?
+                }
+            });
+        }
+
         // 역마차
         // 웰스파고 은행
-        // 아이템 장착(총기류: 스코필드, 레밍턴, 카빈, 윈체스터, 볼캐닉)
-        // 아이템 장착(조준경, 역마차, 술통)
-        // 아이템 장착(다이너마이트, 감옥)
-
-        //// 모든 플레이어에게 적용되는 카드 사용시
-        //// 캣 벌로우, 인디언, 기관총, 잡화점, 주점 등
-        //public void UseBroadCastCard()
-        //{
-
-        //}
-
         // 웰스파고(count = 3), 역마차(count = 2) 사용시
         public void UseGetCards(int count)
         {
+            Console.WriteLine("카드 얻음");
 
+            this.players.ForEach(player => 
+            {
+                if(player.player_index == current_turn_player)
+                {
+                    CPacket msg = CPacket.create((short)PROTOCOL.DRAWCARD);
+
+                    for(int i=0; i<count; i++)
+                    {
+                        msg.push(deck[i].name);
+                        msg.push(deck[i].shape);
+                        msg.push(deck[i].number);
+
+                        player.send(msg);
+                    }
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        deck.RemoveAt(0);
+                    }
+                }
+            });
         }
 
         // 맥주 사용시
-        public void UseBeer()
+        public void UseBirra()
         {
+            //CPacket msg = CPacket.create((short)PROTOCOL.)
+            this.players.ForEach(player =>
+            {
+                player.Life++;
+            });
 
+            AllUserInfoReset();
         }
 
         // 체력 깎는 경우(즉, 인디언이나 기관총 등에서 임의로 깎지말고, 클라이언트와 인터렉션 확인 후 처리할 것.)

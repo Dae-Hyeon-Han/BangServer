@@ -90,29 +90,56 @@ namespace BangServer
                         //byte targetIndex = msg.pop_byte();
 
                         // 뱅
-                        if(cardName == "BANG") {}
-                        // 빗나감
+                        if(cardName == "BANG") 
+                        {
+                            battle_room.UseBang(msg.pop_byte());
+                        }
+                        // 빗나감. 안 쓸 듯?
                         else if (cardName == "MANCATO") {}
                         // 맥주
-                        else if (cardName == "BIRRA") { }
+                        else if (cardName == "BIRRA") 
+                        {
+                            battle_room.UseBirra();
+                        }
                         // 기관총
-                        else if (cardName == "GATLING") { }
+                        else if (cardName == "GATLING")
+                        {
+                            battle_room.UseGatling();
+                        }
                         // 결투
-                        else if (cardName == "DUELLO") { }
+                        else if (cardName == "DUELLO") 
+                        {
+                            battle_room.UseDuello(msg.pop_byte());
+                        }
                         // 인디언
-                        else if (cardName == "INDIANI") { }
+                        else if (cardName == "INDIANI")
+                        {
+                            battle_room.UseIndiani();
+                        }
                         // 주점
-                        else if (cardName == "SALOON") { }
+                        else if (cardName == "SALOON") 
+                        {
+                            battle_room.UseSaloon();
+                        }
                         // 강탈
                         else if (cardName == "PANICO") { }
                         // 캣 벌로우
                         else if (cardName == "CAT BALOU") { }
                         // 잡화점
-                        else if (cardName == "EMPORIO") { }
+                        else if (cardName == "EMPORIO") 
+                        {
+                            battle_room.UseEmporio();
+                        }
                         // 역마차
-                        else if (cardName == "DILIGENZA") { }
+                        else if (cardName == "DILIGENZA") 
+                        {
+                            battle_room.UseGetCards(2);
+                        }
                         // 웰스파고 은행
-                        else if (cardName == "WELLS FARGO") { }
+                        else if (cardName == "WELLS FARGO") 
+                        {
+                            battle_room.UseGetCards(3);
+                        }
                         // 스코필드, 레밍턴, 카빈, 윈체스터, 볼캐닉, 조준경, 야생마, 술통
                         else if (cardName == "SCHOFIELD" || cardName == "REMINGTON" || 
                                  cardName == "CARABINE" || cardName == "WINCHESTER" || 

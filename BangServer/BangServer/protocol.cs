@@ -66,6 +66,12 @@ namespace BangServer
         // 아이템 장착
         USEEQUIP = 18,
 
+        // 결투, 뱅, 인디언, 기관총 등에 사용
+        REQUEST = 19,
+
+        // 대응 실패 시 사용하는 것
+        REQUESTFAIL = 20,
+
         //// 인디언 사용
         //INDIANS_REQ = 15,
 
