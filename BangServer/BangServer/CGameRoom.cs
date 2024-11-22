@@ -1273,11 +1273,21 @@ namespace BangServer
         /// <param name="targetIndex">공격 대상 플레이어</param>
         public void UseBang(byte targetIndex)
         {
+            Console.WriteLine("뱅 쏨");
             this.players.ForEach(player =>
             {
-                CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
-                msg.push("MINCATO");
-                player.send(msg);
+                if (current_turn_player == player.player_index)
+                {
+                    player.cardCount--;
+                }
+
+                if (targetIndex == player.player_index)
+                {
+                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                    msg.push(targetIndex);
+                    msg.push("MINCATO");
+                    player.send(msg);
+                }
             });
         }
 
@@ -1290,6 +1300,7 @@ namespace BangServer
         // 기관총
         public void UseGatling()
         {
+            Console.WriteLine("기관총 씀");
             CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
 
             this.players.ForEach(player =>
@@ -1307,6 +1318,7 @@ namespace BangServer
         // 결투
         public void UseDuello(byte targetIndex)
         {
+            Console.WriteLine("결투 씀");
             this.players.ForEach(player =>
             {
                 if (player.player_index == targetIndex)
@@ -1321,7 +1333,7 @@ namespace BangServer
         // 인디언
         public void UseIndiani()
         {
-
+            Console.WriteLine("인디언 씀");
             this.players.ForEach(player =>
             {
                 if (player.player_index != current_turn_player)
@@ -1335,6 +1347,7 @@ namespace BangServer
         // 주점
         public void UseSaloon()
         {
+            Console.WriteLine("주점 씀");
             this.players.ForEach(player =>
             {
                 player.Life++;
@@ -1348,7 +1361,7 @@ namespace BangServer
         // 잡화점
         public void UseEmporio()
         {
-            Console.WriteLine("잡화점");
+            Console.WriteLine("잡화점 씀");
 
             this.players.ForEach(player =>
             {
@@ -1395,10 +1408,12 @@ namespace BangServer
         // 맥주 사용시
         public void UseBirra()
         {
+            Console.WriteLine("맥주 씀");
             //CPacket msg = CPacket.create((short)PROTOCOL.)
             this.players.ForEach(player =>
             {
-                player.Life++;
+                if(player.player_index == current_turn_player)
+                    player.Life++;
             });
 
             AllUserInfoReset();
@@ -1413,6 +1428,8 @@ namespace BangServer
         #region 장비 사용시 메서드
         public void EquipGun(byte index, string EquipName)
         {
+            Console.WriteLine("장비 씀");
+
             //foreach(byte player in this.ba)
             this.players.ForEach(player =>
             {
@@ -1439,7 +1456,7 @@ namespace BangServer
             });
 
             // 정보 전달
-            AllUserInfoReset();
+            //AllUserInfoReset();
         }
         #endregion
         #endregion
@@ -1492,16 +1509,10 @@ namespace BangServer
 
         // 턴 시작될 때 카드 뽑기
         // 일단 디폴트로 작성. 웰스 파고 및 역마차는 별도로 작성
-        public void DrawCard(byte index)
+        public void DrawCard(byte index, int count)
         {
             CPacket msg = CPacket.create((short)PROTOCOL.DRAWCARD);
-
-
-            // 
-            int count = 2;
-
-
-
+            msg.push((byte)this.players.Count);
             msg.push(index);                    // 인덱스 번호
             msg.push(count);                    // 드로우 할 카드 수
 
@@ -1510,6 +1521,19 @@ namespace BangServer
                 msg.push(deck[i].name);         // 카드 이름
                 msg.push(deck[i].shape);        // 카드 모양
                 msg.push(deck[i].number);       // 카드 숫자
+            }
+
+            this.players.ForEach(player => 
+            {
+                if(player.player_index == index)
+                {
+                    player.send(msg);
+                }
+            });
+
+            for (int i = 0; i < 4; i++)
+            {
+                deck.RemoveAt(0);
             }
         }
 

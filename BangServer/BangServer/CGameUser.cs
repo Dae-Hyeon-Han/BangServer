@@ -75,12 +75,16 @@ namespace BangServer
                     {
                         short begin_pos = msg.pop_int16();
                         short target_pos = msg.pop_int16();
-                        //this.battle_room.moving_req(this.player, begin_pos, target_pos);
                     }
                     break;
                 case PROTOCOL.CHARACTERCHOICE:
                     {
                         // 캐릭터 선택 기능 활성화 시 사용할 것
+                    }
+                    break;
+                case PROTOCOL.DRAWCARD:
+                    {
+                        battle_room.DrawCard(msg.pop_byte(), msg.pop_int32());
                     }
                     break;
                 case PROTOCOL.USECARD:
