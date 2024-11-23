@@ -87,6 +87,11 @@ namespace BangServer
                         battle_room.DrawCard(msg.pop_byte(), msg.pop_int32());
                     }
                     break;
+                case PROTOCOL.DROPCARD:         // 카드 사용(USECARD) 후 쓴 카드 덱에 넣는 용도
+                    {
+                        //battle_room.DrawCard(msg.pop_byte(), msg.pop_int32());
+                    }
+                    break;
                 case PROTOCOL.USECARD:
                     {
                         // 첫번째 pop_string 값은 무조건 사용한 카드 이름일 것

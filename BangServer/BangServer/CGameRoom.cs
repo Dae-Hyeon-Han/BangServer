@@ -1537,6 +1537,24 @@ namespace BangServer
             }
         }
 
+        public void DropCard(string cardName, string cardShape, string cardNumber)
+        {
+            CCard usedCard = new CCard();
+            usedCard.name = cardName;
+            usedCard.shape = cardShape;
+            usedCard.number = cardNumber;
+
+            usedCardDeck.Push(usedCard);
+
+            // 유저들에게 보이기.
+            CPacket msg = CPacket.create((short)PROTOCOL.DROPCARD);
+            msg.push(cardName);
+            msg.push(cardShape);
+            msg.push(cardNumber);
+
+            broadcast(msg);
+        }
+
         // 덱이 모두 소모되면 사용
         public void DeckReset()
         {
