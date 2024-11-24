@@ -23,10 +23,10 @@ namespace BangServer
         private int defaultRange;                      // 기본 사거리
         public int depth { get; set; }                  // 플레이어를 볼 때
         // 장비
-        private string gun;
-        private string mirono;
-        private string mustang;
-        private string barile;
+        private string gun = "COLT";
+        private string mirono = "false";
+        private string mustang = "false";
+        private string barile = "false";
 
 
         public int MaxLife

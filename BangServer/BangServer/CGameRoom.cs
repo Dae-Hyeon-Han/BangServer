@@ -1276,10 +1276,10 @@ namespace BangServer
             Console.WriteLine("뱅 쏨");
             this.players.ForEach(player =>
             {
-                if (current_turn_player == player.player_index)
-                {
-                    player.cardCount--;
-                }
+                //if (current_turn_player == player.player_index)
+                //{
+                //    player.cardCount--;
+                //}
 
                 if (targetIndex == player.player_index)
                 {
@@ -1456,7 +1456,7 @@ namespace BangServer
             });
 
             // 정보 전달
-            //AllUserInfoReset();
+            AllUserInfoReset();
         }
         #endregion
         #endregion
@@ -1537,7 +1537,7 @@ namespace BangServer
             }
         }
 
-        public void DropCard(string cardName, string cardShape, string cardNumber)
+        public void DropCard(byte playerIndex, string cardName, string cardShape, string cardNumber)
         {
             CCard usedCard = new CCard();
             usedCard.name = cardName;
@@ -1547,6 +1547,16 @@ namespace BangServer
             usedCardDeck.Push(usedCard);
 
             // 유저들에게 보이기.
+            this.players.ForEach(player => 
+            {
+                if(player.player_index == playerIndex)
+                {
+                    Console.WriteLine($"플레이어 체크: {player.player_index} : {playerIndex}");
+                    player.cardCount--;
+                }
+            });
+
+            // 손패 줄어드는거 확인
             CPacket msg = CPacket.create((short)PROTOCOL.DROPCARD);
             msg.push(cardName);
             msg.push(cardShape);
