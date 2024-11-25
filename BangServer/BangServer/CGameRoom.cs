@@ -1249,6 +1249,7 @@ namespace BangServer
         {
             //[프로토콜][인덱스][남은 생명력][손패 숫자][사정거리][거리감(depth)][총][조준경][야생마][술통]
             CPacket msg = CPacket.create((short)PROTOCOL.ALLPLAYERINFOSET);
+            msg.push((byte)this.players.Count);
 
             // 플레이어들이 선택한 캐릭터 전송
             this.players.ForEach(player =>
