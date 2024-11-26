@@ -1578,6 +1578,20 @@ namespace BangServer
 
         }
 
+        // 교전 관련
+        public void RequestFail(byte index)
+        {
+            this.players.ForEach(player => 
+            {
+                if(player.player_index == index)
+                {
+                    player.Life--;
+                }
+            });
+
+            AllUserInfoReset();
+        }
+
         /// <summary>
         /// 
         /// </summary>

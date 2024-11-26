@@ -163,9 +163,22 @@ namespace BangServer
                         else if (cardName == "DINAMITE") { }
                     }
                     break;
-                case PROTOCOL.USEEQUIP:
+                case PROTOCOL.REACTION:
                     {
+                        string tag = msg.pop_string();
+                        if(tag == "MINCATO")
+                        {
 
+                        }
+                        if (tag == "BANG")
+                        {
+
+                        }
+                    }
+                    break;
+                case PROTOCOL.REQUESTFAIL:
+                    {
+                        battle_room.RequestFail(msg.pop_byte());
                     }
                     break;
                 case PROTOCOL.CHAT:
