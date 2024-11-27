@@ -1263,6 +1263,8 @@ namespace BangServer
                 msg.push(player.Mirono);                // true면 장착, 아니면 장착하지 않음(false 아님)
                 msg.push(player.Mustang);               // true면 장착, 아니면 장착하지 않음(false 아님)
                 msg.push(player.Barile);                // true면 장착, 아니면 장착하지 않음(false 아님)
+                msg.push(player.Prigione);              // true면 장착, 아니면 장착하지 않음(false 아님)
+                msg.push(player.Dinamite);              // true면 장착, 아니면 장착하지 않음(false 아님)
             });
             broadcast(msg);
         }
@@ -1369,7 +1371,7 @@ namespace BangServer
                 // 어떻게 순서대로 주지?
                 CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
 
-                if(player.Life != 0)
+                if (player.Life != 0)
                 {
                     // 일단 랜덤 처리?
                 }
@@ -1383,19 +1385,18 @@ namespace BangServer
         {
             Console.WriteLine("카드 얻음");
 
-            this.players.ForEach(player => 
+            this.players.ForEach(player =>
             {
-                if(player.player_index == current_turn_player)
+                CPacket msg = CPacket.create((short)PROTOCOL.DRAWCARD);
+                if (player.player_index == current_turn_player)
                 {
-                    CPacket msg = CPacket.create((short)PROTOCOL.DRAWCARD);
 
-                    for(int i=0; i<count; i++)
+                    for (int i = 0; i < count; i++)
                     {
                         msg.push(deck[i].name);
                         msg.push(deck[i].shape);
                         msg.push(deck[i].number);
 
-                        player.send(msg);
                     }
 
                     for (int i = 0; i < count; i++)
@@ -1403,6 +1404,7 @@ namespace BangServer
                         deck.RemoveAt(0);
                     }
                 }
+                player.send(msg);
             });
         }
 
@@ -1413,7 +1415,7 @@ namespace BangServer
             //CPacket msg = CPacket.create((short)PROTOCOL.)
             this.players.ForEach(player =>
             {
-                if(player.player_index == current_turn_player)
+                if (player.player_index == current_turn_player)
                     player.Life++;
             });
 
@@ -1524,9 +1526,9 @@ namespace BangServer
                 msg.push(deck[i].number);       // 카드 숫자
             }
 
-            this.players.ForEach(player => 
+            this.players.ForEach(player =>
             {
-                if(player.player_index == index)
+                if (player.player_index == index)
                 {
                     player.send(msg);
                 }
@@ -1548,9 +1550,9 @@ namespace BangServer
             usedCardDeck.Push(usedCard);
 
             // 유저들에게 보이기.
-            this.players.ForEach(player => 
+            this.players.ForEach(player =>
             {
-                if(player.player_index == playerIndex)
+                if (player.player_index == playerIndex)
                 {
                     Console.WriteLine($"플레이어 체크: {player.player_index} : {playerIndex}");
                     player.cardCount--;
@@ -1581,9 +1583,9 @@ namespace BangServer
         // 교전 관련
         public void RequestFail(byte index)
         {
-            this.players.ForEach(player => 
+            this.players.ForEach(player =>
             {
-                if(player.player_index == index)
+                if (player.player_index == index)
                 {
                     player.Life--;
                 }

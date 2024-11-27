@@ -28,6 +28,8 @@ namespace BangServer
         private string mirono = "false";
         private string mustang = "false";
         private string barile = "false";
+        private string prigione = "false";
+        private string dinamite = "false";
 
 
         public int MaxLife
@@ -127,6 +129,18 @@ namespace BangServer
         {
             get { return barile; }
             set{ barile = value; }
+        }
+
+        public string Prigione
+        {
+            get { return prigione; }
+            set { prigione = value; }
+        }
+
+        public string Dinamite
+        {
+            get { return dinamite; }
+            set { dinamite = value; }
         }
 
         public List<short> viruses { get; private set; }
