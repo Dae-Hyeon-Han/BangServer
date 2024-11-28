@@ -1277,21 +1277,23 @@ namespace BangServer
         public void UseBang(byte targetIndex)
         {
             Console.WriteLine("뱅 쏨");
+            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
             this.players.ForEach(player =>
             {
-                //if (current_turn_player == player.player_index)
-                //{
-                //    player.cardCount--;
-                //}
+                if (current_turn_player == player.player_index)
+                {
+                    player.cardCount--;
+                }
 
                 if (targetIndex == player.player_index)
                 {
-                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
                     msg.push(targetIndex);
                     msg.push("MINCATO");
-                    player.send(msg);
                 }
+                player.send(msg);
             });
+
+            AllUserInfoReset();
         }
 
         // BANG의 대상이 된 플레이어가 빗나감을 사용할 경우 호출
@@ -1312,9 +1314,15 @@ namespace BangServer
                 if (player.player_index != current_turn_player)
                 {
                     msg.push("MINCATO");
-                    player.send(msg);
                 }
+                else if (player.player_index == current_turn_player)
+                {
+                    player.cardCount--;
+                }
+                player.send(msg);
             });
+
+            AllUserInfoReset();
         }
 
 
@@ -1322,30 +1330,43 @@ namespace BangServer
         public void UseDuello(byte targetIndex)
         {
             Console.WriteLine("결투 씀");
+            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
             this.players.ForEach(player =>
             {
+                if (player.player_index == current_turn_player)
+                {
+                    player.cardCount--;
+                }
+
                 if (player.player_index == targetIndex)
                 {
-                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
                     msg.push("BANG");
-                    player.send(msg);
                 }
+                player.send(msg);
             });
+
+            AllUserInfoReset();
         }
 
         // 인디언
         public void UseIndiani()
         {
             Console.WriteLine("인디언 씀");
+            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
             this.players.ForEach(player =>
             {
                 if (player.player_index != current_turn_player)
                 {
-                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
                     msg.push("BANG");
-                    player.send(msg);
                 }
+                else if (player.player_index == current_turn_player)
+                {
+                    player.cardCount--;
+                }
+                player.send(msg);
             });
+
+            AllUserInfoReset();
         }
         // 주점
         public void UseSaloon()
@@ -1353,6 +1374,11 @@ namespace BangServer
             Console.WriteLine("주점 씀");
             this.players.ForEach(player =>
             {
+                if (player.player_index == current_turn_player)
+                {
+                    player.cardCount--;
+                }
+
                 player.Life++;
             });
 
@@ -1360,22 +1386,52 @@ namespace BangServer
         }
         // 강탈
         // 캣 벌로우
+        public void UseCatBalou()
+        {
+            Console.WriteLine("캣 벌로우 씀");
+
+            this.players.ForEach(player =>
+            {
+                if (player.player_index == current_turn_player)
+                {
+                    player.cardCount--;
+                }
+
+                // 캣 벌로우 효과
+            });
+
+            AllUserInfoReset();
+        }
 
         // 잡화점
         public void UseEmporio()
         {
             Console.WriteLine("잡화점 씀");
 
+            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
             this.players.ForEach(player =>
             {
                 // 어떻게 순서대로 주지?
-                CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                if (player.player_index == current_turn_player)
+                {
+                    player.cardCount--;
+                }
 
                 if (player.Life != 0)
                 {
+                    player.cardCount++;
+
                     // 일단 랜덤 처리?
+                    msg.push(deck[0].name);         // 카드 이름
+                    msg.push(deck[0].shape);        // 카드 모양
+                    msg.push(deck[0].number);       // 카드 숫자
+                    deck.RemoveAt(0);
                 }
+
+                player.send(msg);
             });
+
+            AllUserInfoReset();
         }
 
         // 역마차
@@ -1385,11 +1441,12 @@ namespace BangServer
         {
             Console.WriteLine("카드 얻음");
 
+            CPacket msg = CPacket.create((short)PROTOCOL.DRAWCARD);
             this.players.ForEach(player =>
             {
-                CPacket msg = CPacket.create((short)PROTOCOL.DRAWCARD);
                 if (player.player_index == current_turn_player)
                 {
+                    player.cardCount--;
 
                     for (int i = 0; i < count; i++)
                     {
@@ -1406,6 +1463,8 @@ namespace BangServer
                 }
                 player.send(msg);
             });
+
+            AllUserInfoReset();
         }
 
         // 맥주 사용시
@@ -1416,7 +1475,10 @@ namespace BangServer
             this.players.ForEach(player =>
             {
                 if (player.player_index == current_turn_player)
+                {
+                    player.cardCount--;
                     player.Life++;
+                }
             });
 
             AllUserInfoReset();
@@ -1438,6 +1500,8 @@ namespace BangServer
             {
                 if (player.player_index == index)
                 {
+                    player.cardCount--;
+
                     // 장비 장착
                     if (EquipName == "MIRONO")
                     {
