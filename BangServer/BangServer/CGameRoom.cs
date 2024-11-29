@@ -1265,6 +1265,22 @@ namespace BangServer
                 msg.push(player.Barile);                // true면 장착, 아니면 장착하지 않음(false 아님)
                 msg.push(player.Prigione);              // true면 장착, 아니면 장착하지 않음(false 아님)
                 msg.push(player.Dinamite);              // true면 장착, 아니면 장착하지 않음(false 아님)
+
+                // 확인용
+                Console.WriteLine("----------------------------------------------");
+                Console.WriteLine($"인덱스: {player.player_index}");
+                Console.WriteLine($"생명력: {player.Life}");
+                Console.WriteLine($"카드수: {player.cardCount}");
+                Console.WriteLine($"사거리: {player.range}");
+                Console.WriteLine($"거리감: {player.depth}");
+                Console.WriteLine($"총종류: {player.Gun}");
+                Console.WriteLine($"조준경: {player.Mirono}");
+                Console.WriteLine($"야생마: {player.Mustang}");
+                Console.WriteLine($"술  통: {player.Barile}");
+                Console.WriteLine($"감  옥: {player.Prigione}");
+                Console.WriteLine($"폭  탄: {player.Dinamite}");
+                Console.WriteLine("----------------------------------------------");
+
             });
             broadcast(msg);
         }
@@ -1276,7 +1292,11 @@ namespace BangServer
         /// <param name="targetIndex">공격 대상 플레이어</param>
         public void UseBang(byte targetIndex)
         {
+            Console.WriteLine("----------------------------------------------");
             Console.WriteLine("뱅 쏨");
+            Console.WriteLine($"대상(혁): {targetIndex}");
+            Console.WriteLine($"쏜 사람: {current_turn_player}");
+            Console.WriteLine("----------------------------------------------");
             CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
             this.players.ForEach(player =>
             {
@@ -1453,7 +1473,7 @@ namespace BangServer
                         msg.push(deck[i].name);
                         msg.push(deck[i].shape);
                         msg.push(deck[i].number);
-
+                        player.cardCount++;
                     }
 
                     for (int i = 0; i < count; i++)
@@ -1594,6 +1614,7 @@ namespace BangServer
             {
                 if (player.player_index == index)
                 {
+                    player.cardCount+=2;
                     player.send(msg);
                 }
             });
@@ -1602,6 +1623,8 @@ namespace BangServer
             {
                 deck.RemoveAt(0);
             }
+
+            AllUserInfoReset();
         }
 
         public void DropCard(byte playerIndex, string cardName, string cardShape, string cardNumber)
