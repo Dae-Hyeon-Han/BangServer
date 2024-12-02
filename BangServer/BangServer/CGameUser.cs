@@ -169,7 +169,7 @@ namespace BangServer
                 case PROTOCOL.REACTION:
                     {
                         string tag = msg.pop_string();
-                        if(tag == "MINCATO")
+                        if(tag == "MANCATO")
                         {
 
                         }

@@ -1305,10 +1305,12 @@ namespace BangServer
                     player.cardCount--;
                 }
 
-                if (targetIndex == player.player_index)
+                if (player.player_index == targetIndex)
                 {
+                    player.Life--;      // 테스트용
+                    Console.WriteLine("빗나감 요청");
                     msg.push(targetIndex);
-                    msg.push("MINCATO");
+                    msg.push("MANCATO");
                 }
                 player.send(msg);
             });
@@ -1333,7 +1335,7 @@ namespace BangServer
                 // 기관총을 낸 유저 제외
                 if (player.player_index != current_turn_player)
                 {
-                    msg.push("MINCATO");
+                    msg.push("MANCATO");
                 }
                 else if (player.player_index == current_turn_player)
                 {
@@ -1480,8 +1482,8 @@ namespace BangServer
                     {
                         deck.RemoveAt(0);
                     }
+                    player.send(msg);
                 }
-                player.send(msg);
             });
 
             AllUserInfoReset();
@@ -1513,7 +1515,16 @@ namespace BangServer
         #region 장비 사용시 메서드
         public void EquipGun(byte index, string EquipName)
         {
+            Console.WriteLine("---------------------------");
             Console.WriteLine("장비 씀");
+            Console.WriteLine($"인덱스: {index}");
+            Console.WriteLine($"장  비: {EquipName}");
+            Console.WriteLine("---------------------------");
+
+            // 이 함수에 문제가 있을 확률 높음
+            // 문제점1: 술통, 야생마는 씹히지만 총은 장착됨
+            // 문제점2: 조준경 장착시 모든 템이 한번에 장착됨
+            // 문제점3: 서버에서는 정상 처리 되나, 클라에서 비정상 동작함
 
             //foreach(byte player in this.ba)
             this.players.ForEach(player =>
@@ -1614,7 +1625,7 @@ namespace BangServer
             {
                 if (player.player_index == index)
                 {
-                    player.cardCount+=2;
+                    player.cardCount += 2;
                     player.send(msg);
                 }
             });
