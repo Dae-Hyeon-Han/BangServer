@@ -168,14 +168,26 @@ namespace BangServer
                     break;
                 case PROTOCOL.REACTION:
                     {
+                        byte reactIndex = msg.pop_byte();
                         string tag = msg.pop_string();
                         if(tag == "MANCATO")
                         {
-
+                            Console.WriteLine("빗나감으로 대응");
+                            battle_room.ReactMancato(reactIndex);
                         }
-                        if (tag == "BANG")
+                        else if (tag == "BANG")
                         {
-
+                            Console.WriteLine("뱅으로 대응");
+                            battle_room.ReactBang(reactIndex);
+                        }
+                        else if(tag == "DUELLO")
+                        {
+                            Console.WriteLine("결투 중 뱅 사용");
+                        }
+                        else if(tag == "DENY")
+                        {
+                            Console.WriteLine("저항하지 않음");
+                            battle_room.ReactDeny(reactIndex);
                         }
                     }
                     break;

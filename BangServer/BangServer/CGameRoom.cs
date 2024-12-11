@@ -57,7 +57,7 @@ namespace BangServer
 
         // 드로우 가능한 덱, 소모된 카드 덱
         List<CCard> deck = new List<CCard>();
-        Stack<CCard> usedCardDeck = new Stack<CCard>();
+        Stack<CCard> usedCardDeck = new Stack<CCard>();             // 사실, 스택도 큐도 아닌데~ 리스트여야 하는데~~
 
         // 현재 턴을 진행하고 있는 플레이어의 인덱스.
         byte current_turn_player;
@@ -1297,51 +1297,46 @@ namespace BangServer
             Console.WriteLine($"대상(혁): {targetIndex}");
             Console.WriteLine($"쏜 사람: {current_turn_player}");
             Console.WriteLine("----------------------------------------------");
-            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
             this.players.ForEach(player =>
             {
-                if (current_turn_player == player.player_index)
+                if (player.player_index == current_turn_player)
                 {
                     player.cardCount--;
                 }
 
                 if (player.player_index == targetIndex)
                 {
-                    player.Life--;      // 테스트용
+                    //player.Life--;      // 테스트용
+                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
                     Console.WriteLine("빗나감 요청");
                     msg.push(targetIndex);
                     msg.push("MANCATO");
+                    player.send(msg);
                 }
-                player.send(msg);
             });
 
             AllUserInfoReset();
-        }
-
-        // BANG의 대상이 된 플레이어가 빗나감을 사용할 경우 호출
-        public void UseMancato()
-        {
-
         }
 
         // 기관총
         public void UseGatling()
         {
             Console.WriteLine("기관총 씀");
-            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
 
             this.players.ForEach(player =>
             {
                 // 기관총을 낸 유저 제외
                 if (player.player_index != current_turn_player)
                 {
+                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                    msg.push(player.player_index);
                     msg.push("MANCATO");
+                    player.send(msg);
                 }
                 else if (player.player_index == current_turn_player)
                 {
                     player.cardCount--;
                 }
-                player.send(msg);
             });
 
             AllUserInfoReset();
@@ -1352,7 +1347,6 @@ namespace BangServer
         public void UseDuello(byte targetIndex)
         {
             Console.WriteLine("결투 씀");
-            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
             this.players.ForEach(player =>
             {
                 if (player.player_index == current_turn_player)
@@ -1362,9 +1356,11 @@ namespace BangServer
 
                 if (player.player_index == targetIndex)
                 {
+                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                    msg.push(targetIndex);
                     msg.push("BANG");
+                    player.send(msg);
                 }
-                player.send(msg);
             });
 
             AllUserInfoReset();
@@ -1374,18 +1370,19 @@ namespace BangServer
         public void UseIndiani()
         {
             Console.WriteLine("인디언 씀");
-            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
             this.players.ForEach(player =>
             {
                 if (player.player_index != current_turn_player)
                 {
+                    CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                    msg.push(player.player_index);
                     msg.push("BANG");
+                    player.send(msg);
                 }
                 else if (player.player_index == current_turn_player)
                 {
                     player.cardCount--;
                 }
-                player.send(msg);
             });
 
             AllUserInfoReset();
@@ -1430,7 +1427,6 @@ namespace BangServer
         {
             Console.WriteLine("잡화점 씀");
 
-            CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
             this.players.ForEach(player =>
             {
                 // 어떻게 순서대로 주지?
@@ -1441,16 +1437,19 @@ namespace BangServer
 
                 if (player.Life != 0)
                 {
-                    player.cardCount++;
+                    //CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                    //CPacket msg = CPacket.create((short)PROTOCOL.REQUEST);
+                    //player.cardCount++;
 
-                    // 일단 랜덤 처리?
-                    msg.push(deck[0].name);         // 카드 이름
-                    msg.push(deck[0].shape);        // 카드 모양
-                    msg.push(deck[0].number);       // 카드 숫자
-                    deck.RemoveAt(0);
+                    //// 일단 랜덤 처리?
+                    //msg.push(deck[0].name);         // 카드 이름
+                    //msg.push(deck[0].shape);        // 카드 모양
+                    //msg.push(deck[0].number);       // 카드 숫자
+                    //deck.RemoveAt(0);
+                    //player.send(msg);
+                    // 드로우 카드로는 안 되네?
                 }
 
-                player.send(msg);
             });
 
             AllUserInfoReset();
@@ -1529,7 +1528,7 @@ namespace BangServer
             //foreach(byte player in this.ba)
             this.players.ForEach(player =>
             {
-                if (player.player_index == index)
+                if (player.player_index == current_turn_player)
                 {
                     player.cardCount--;
 
@@ -1677,6 +1676,48 @@ namespace BangServer
         {
 
         }
+
+
+        // BANG의 대상이 된 플레이어가 빗나감을 사용할 경우 호출
+        public void ReactMancato(byte index)
+        {
+            this.players.ForEach(player =>
+            {
+                if (player.player_index == index)
+                {
+                    player.cardCount--;
+                }
+            });
+
+            AllUserInfoReset();
+        }
+
+        public void ReactBang(byte index)
+        {
+            this.players.ForEach(player =>
+            {
+                if (player.player_index == index)
+                {
+                    player.cardCount--;
+                }
+            });
+
+            AllUserInfoReset();
+        }
+
+        public void ReactDeny(byte index)
+        {
+            this.players.ForEach(player =>
+            {
+                if (player.player_index == index)
+                {
+                    player.Life--;
+                }
+            });
+
+            AllUserInfoReset();
+        }
+
 
         // 교전 관련
         public void RequestFail(byte index)

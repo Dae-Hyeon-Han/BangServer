@@ -17,7 +17,8 @@ namespace BangServer
         public string charName { get; set; }                    // 플레이어 캐릭터. 근데 public 인데 get,set, 쓰는 의미가 있나?
         private int maxLife;
         public int cardCount { get; set; }              // 손 패수
-        private bool death = false;
+
+        bool death;
 
         // 거리 측정용
         public int range { get; set; }                  // 플레이어가 볼 때
@@ -48,11 +49,16 @@ namespace BangServer
             get { return life; }
             set
             {
+                if (death == true)
+                    return;
+
                 life = value;
+
                 if(life <= 0)
                 {
                     // 플레이어 사망 시
                     Console.WriteLine("여기에 사망시 쓰일 메서드 기술");
+                    death = true;
                 }
                 else if(life >= maxLife)
                 {
