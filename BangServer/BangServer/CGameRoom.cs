@@ -1663,6 +1663,8 @@ namespace BangServer
             msg.push(cardNumber);
 
             broadcast(msg);
+
+            AllUserInfoReset();
         }
 
         // 덱이 모두 소모되면 사용
@@ -1681,6 +1683,7 @@ namespace BangServer
         // BANG의 대상이 된 플레이어가 빗나감을 사용할 경우 호출
         public void ReactMancato(byte index)
         {
+            Console.WriteLine("빗나감 사용함");
             this.players.ForEach(player =>
             {
                 if (player.player_index == index)
@@ -1707,6 +1710,7 @@ namespace BangServer
 
         public void ReactDeny(byte index)
         {
+            Console.WriteLine("그냥 맞음");
             this.players.ForEach(player =>
             {
                 if (player.player_index == index)

@@ -75,6 +75,9 @@ namespace BangServer
         // 카드 사용 시 버리는 용도
         DROPCARD = 21,
 
+        // 결투 시
+        DUELLO = 22,
+
         //// 인디언 사용
         //INDIANS_REQ = 15,
 
