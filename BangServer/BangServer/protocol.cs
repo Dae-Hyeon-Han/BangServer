@@ -78,6 +78,12 @@ namespace BangServer
         // 결투 시
         DUELLO = 22,
 
+        // 강탈
+        PANICO= 23,
+
+        // 캣 벌로우
+        CATBALOU = 24,
+
         //// 인디언 사용
         //INDIANS_REQ = 15,
 

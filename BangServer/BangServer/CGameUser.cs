@@ -131,11 +131,14 @@ namespace BangServer
                             battle_room.UseSaloon();
                         }
                         // 강탈
-                        else if (cardName == "PANICO") { }
+                        else if (cardName == "PANICO") 
+                        {
+                            battle_room.UsePanico(msg.pop_byte());
+                        }
                         // 캣 벌로우
                         else if (cardName == "CAT BALOU") 
                         {
-                            battle_room.UseCatBalou();
+                            battle_room.UseCatBalou(msg.pop_byte());
                         }
                         // 잡화점
                         else if (cardName == "EMPORIO") 

@@ -57,7 +57,7 @@ namespace BangServer
 
         // 드로우 가능한 덱, 소모된 카드 덱
         List<CCard> deck = new List<CCard>();
-        Stack<CCard> usedCardDeck = new Stack<CCard>();             // 사실, 스택도 큐도 아닌데~ 리스트여야 하는데~~
+        List<CCard> usedCardDeck = new List<CCard>();             // 사실, 스택도 큐도 아닌데~ 리스트여야 하는데~~
 
         // 현재 턴을 진행하고 있는 플레이어의 인덱스.
         byte current_turn_player;
@@ -1404,8 +1404,31 @@ namespace BangServer
             AllUserInfoReset();
         }
         // 강탈
+        public void UsePanico(byte targetIndex)
+        {
+            Console.WriteLine("강탈 씀");
+
+            this.players.ForEach(player =>
+            {
+                if (player.player_index == current_turn_player)
+                {
+                    player.cardCount--;
+                }
+                else if (player.player_index == targetIndex)
+                {
+                    player.cardCount--;
+                    // 강탈 효과
+                    CPacket msg = CPacket.create((short)PROTOCOL.PANICO);
+                    player.send(msg);
+                }
+
+            });
+
+            AllUserInfoReset();
+        }
+
         // 캣 벌로우
-        public void UseCatBalou()
+        public void UseCatBalou(byte targetIndex)
         {
             Console.WriteLine("캣 벌로우 씀");
 
@@ -1415,8 +1438,13 @@ namespace BangServer
                 {
                     player.cardCount--;
                 }
-
-                // 캣 벌로우 효과
+                else if (player.player_index == targetIndex)
+                {
+                    player.cardCount--;
+                    // 캣 벌로우 효과
+                    CPacket msg = CPacket.create((short)PROTOCOL.CATBALOU);
+                    player.send(msg);
+                }
             });
 
             AllUserInfoReset();
@@ -1461,13 +1489,16 @@ namespace BangServer
         public void UseGetCards(int count)
         {
             Console.WriteLine("카드 얻음");
-
             CPacket msg = CPacket.create((short)PROTOCOL.DRAWCARD);
+            msg.push((byte)this.players.Count);
+
             this.players.ForEach(player =>
             {
                 if (player.player_index == current_turn_player)
                 {
                     player.cardCount--;
+                    msg.push(player.player_index);
+                    msg.push(count);
 
                     for (int i = 0; i < count; i++)
                     {
@@ -1644,7 +1675,7 @@ namespace BangServer
             usedCard.shape = cardShape;
             usedCard.number = cardNumber;
 
-            usedCardDeck.Push(usedCard);
+            usedCardDeck.Add(usedCard);
 
             // 유저들에게 보이기.
             this.players.ForEach(player =>
@@ -1652,7 +1683,7 @@ namespace BangServer
                 if (player.player_index == playerIndex)
                 {
                     Console.WriteLine($"플레이어 체크: {player.player_index} : {playerIndex}");
-                    player.cardCount--;
+                    //player.cardCount--;
                 }
             });
 
@@ -1665,12 +1696,22 @@ namespace BangServer
             broadcast(msg);
 
             AllUserInfoReset();
+
+            if (deck.Count <= 10)
+                DeckReset();
         }
 
         // 덱이 모두 소모되면 사용
         public void DeckReset()
         {
+            List<CCard> tempDeck = new List<CCard>();
 
+            tempDeck = CardShuffle(usedCardDeck);
+
+            for (int i = 0; i < tempDeck.Count; i++)
+            {
+                deck.Add(tempDeck[i]);
+            }
         }
 
         // 모든 플레이어의 잔여 라이프, 손패 수, 아이템 장착 현황 등을 담아 셋팅하는 메서드
